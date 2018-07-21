@@ -1,0 +1,26 @@
+h1, label {
+	margin: 100px auto 10px auto;
+	position: relative;
+	width: 300px;
+	height: 100px;
+}
+
+div {
+	margin: auto;
+	position: relative;
+	width: 200px;
+}
+
+#btn {
+	margin-top: 30px;
+}
+
+#exception{
+    position: static;
+    left: 30px;
+    right: 30px;
+    margin: 10px;
+    font-size: 5pt;
+    color: red;
+    float: left;
+}
