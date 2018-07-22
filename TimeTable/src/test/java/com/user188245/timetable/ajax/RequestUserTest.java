@@ -1,6 +1,5 @@
 package com.user188245.timetable.ajax;
 
-import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,15 +8,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.user188245.timetable.controller.ajax.RegistrationController;
 import com.user188245.timetable.model.dto.RequestUser;
@@ -49,9 +45,7 @@ public class RequestUserTest {
 			.with(csrf().asHeader())
 			.param("data", userJson))
 			.andExpect(status().isOk())
-			.andExpect(request().attribute("data", "3"));
-		
-		
+			.andExpect(request().attribute("errorCode", 0));
 	}
 
 }

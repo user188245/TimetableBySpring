@@ -1,6 +1,7 @@
 package com.user188245.timetable.model.dto;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Set;
 
 
@@ -9,6 +10,9 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
@@ -24,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
 
 @Entity
 @Validated
+@Table(indexes= {@Index(columnList = "username"),@Index(columnList = "email")})
 public class User extends BasicDTO implements UserDetails, CredentialsContainer{
 	
 	/**
@@ -51,13 +56,13 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer{
 	@Autowired
 	private static PasswordEncoder passwordEncoder;
 	
-	@Enumerated(EnumType.STRING)
-	@ElementCollection(targetClass=Authority.class)
-	private Set<Authority> authorities;
+	@Enumerated(EnumType.ORDINAL)
+	@ElementCollection(targetClass=Authority.class, fetch=FetchType.EAGER)
+	private EnumSet<Authority> authorities;
 	
 	public User() {}
 
-	private User(String username, String password, String email, String description, Set<Authority> authorities) {
+	private User(String username, String password, String email, String description, EnumSet<Authority> authorities) {
 		this.username = username;
 		this.password = passwordEncoder.encode(password);
 		this.email = email;
@@ -65,8 +70,8 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer{
 		this.authorities = authorities;
 	}
 	
-	public static void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-		User.passwordEncoder = passwordEncoder;
+	public static PasswordEncoder getPasswordEncoder() {
+		return User.passwordEncoder;
 	}
 	
 	public static void generatePasswordEncoder() {

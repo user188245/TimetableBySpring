@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class MainController {
 	
 	@GetMapping(value = "/")
+    public String root(Model model) {
+        return "redirect:/index";
+    }
+	
+	@GetMapping(value = "/index")
     public String index(Model model) {
         return "index";
     }

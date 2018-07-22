@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.user188245.timetable.controller.exception.BadRequestException;
+import com.user188245.timetable.model.core.security.RegistrationService;
 import com.user188245.timetable.model.dao.UserRepository;
 import com.user188245.timetable.model.dto.Request;
 import com.user188245.timetable.model.dto.RequestUser;
@@ -28,9 +29,8 @@ public class RegistrationController {
 	
 	
 	@Autowired
-	private UserRepository userRepository;
+	private RegistrationService registrator;
 	
-	@SuppressWarnings("rawtypes")
 	@PostMapping(value="/signup")
 	@ResponseBody
 	public ResponseEntity<Request> requestSignup(
@@ -39,32 +39,38 @@ public class RegistrationController {
 			HttpServletResponse response
 	) throws IOException {
 		if(!data.getPassword().equals(data.getPasswordValidation())) {
-			return new ResponseEntity<Request>(
-					new Request(1001,"PasswordInvalidationError: both \"Password\" and \"PasswordValidation\" must be equivalent each other"),
-					HttpStatus.BAD_REQUEST
+			return Request.buildBadRequestEntity(
+				1001,
+				"PasswordInvalidationError: both \"Password\" and \"PasswordValidation\" must be equivalent each other"
 			);
 		}else if(bindingResult.hasErrors()) {
 			FieldError e = bindingResult.getFieldError();
-			return new ResponseEntity<Request>(
-					new Request(1002,"FieldConditionError: " + "[" +e.getField() + "] " + e.getDefaultMessage()),
-					HttpStatus.BAD_REQUEST
+			return Request.buildBadRequestEntity(
+				1002,
+				"FieldConditionError: " + "[" +e.getField() + "] " + e.getDefaultMessage()
 			);
 		}
-		if(userRepository.checkUsernameDuplication(data.getUsername())) {
-			new ResponseEntity<Request>(
-					new Request(1003,"AlreadyExistAccountParam: " + "Username is already used."),
-					HttpStatus.BAD_REQUEST
+		if(registrator.checkUsernameDuplication(data.getUsername())) {
+			return Request.buildBadRequestEntity(
+				1003,"AlreadyExistAccountParam: " + "Username is already used."
 			);
-		}else if(userRepository.checkEmailDuplication(data.getEmail())) {
-			new ResponseEntity<Request>(
-					new Request(1003,"AlreadyExistAccountParam: " + "Email is already used, Only Email can be use once"),
-					HttpStatus.BAD_REQUEST
+		}else if(registrator.checkEmailDuplication(data.getEmail())) {
+			return Request.buildBadRequestEntity(
+				1003,"AlreadyExistAccountParam: " + "Email is already used, Only Email can be use once"
 			);
 		}else {
-			User user = User.build(data.getUsername(), data.getPassword(), data.getEmail(), data.getDescription());
-			userRepository.save(user);
+			try {
+				User user = User.build(data.getUsername(), data.getPassword(), data.getEmail(), data.getDescription());
+				registrator.signup(user);
+			}catch(Exception e) {
+				return Request.buildBadRequestEntity(
+					1003,
+					"AlreadyExistAccountParam: " + "Unknown Account error, maybe it is because of Database Problem"
+				);
+			}
 		}
-		return new ResponseEntity<Request>(HttpStatus.OK);
+		
+		return Request.buildGoodRequestEntity();
 	}
 
 }
