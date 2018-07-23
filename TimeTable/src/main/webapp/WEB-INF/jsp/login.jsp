@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<sec:authorize access="isAuthenticated()">
+	<c:redirect url="/"/>
+</sec:authorize>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,18 +20,24 @@
 	<p>
 		id or password was invalid.
 	</p>
-	</c:if>
+</c:if>
+<c:if test="${param.logout != null}">
+	<p>
+		로그아웃 되었습니다.
+	</p>
+</c:if>
 	<form id="login" action="/login" method="post">
 		<p>ID:</p>
 		<input type="text" name="${id}" />
 		<p>PASSWORD:</p>
 		<input type="password" name="${password}" />
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		<div id="btn">
+		<div id="login">
 			<input type="submit" name="submit" value="login" />
 		</div>
 	</form>
 	<a href="/signup"><input type="submit" name="submit" value="Signup" /></a>
+	<%-- 
 	<a href="/social"><button class="btn btn-danger">
 		<svg class="social-icons social-icons__google social-icons--enabled" width="20" height="20" viewBox="0 0 20     20" xmlns="http://www.w3.org/2000/svg">
 			<g fill="none" fill-rule="evenodd">
@@ -39,6 +49,8 @@
 		</svg>
 		<span class="social-buttons__service-name">Google 계정으로 로그인</span>
 	</button></a>
+	--%>
+	
 </div>
 
 </body>

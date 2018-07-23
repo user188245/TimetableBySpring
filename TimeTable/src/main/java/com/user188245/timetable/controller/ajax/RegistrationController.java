@@ -1,6 +1,7 @@
 package com.user188245.timetable.controller.ajax;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -19,8 +20,8 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import com.user188245.timetable.controller.exception.BadRequestException;
 import com.user188245.timetable.model.core.security.RegistrationService;
 import com.user188245.timetable.model.dao.UserRepository;
-import com.user188245.timetable.model.dto.Request;
 import com.user188245.timetable.model.dto.RequestUser;
+import com.user188245.timetable.model.dto.Response;
 import com.user188245.timetable.model.dto.User;
 
 @Controller
@@ -33,29 +34,29 @@ public class RegistrationController {
 	
 	@PostMapping(value="/signup")
 	@ResponseBody
-	public ResponseEntity<Request> requestSignup(
+	public ResponseEntity<Response> requestSignup(
 			@Valid @RequestBody RequestUser data, 
 			BindingResult bindingResult,
 			HttpServletResponse response
 	) throws IOException {
 		if(!data.getPassword().equals(data.getPasswordValidation())) {
-			return Request.buildBadRequestEntity(
+			return Response.buildBadResponse(
 				1001,
 				"PasswordInvalidationError: both \"Password\" and \"PasswordValidation\" must be equivalent each other"
 			);
 		}else if(bindingResult.hasErrors()) {
 			FieldError e = bindingResult.getFieldError();
-			return Request.buildBadRequestEntity(
+			return Response.buildBadResponse(
 				1002,
 				"FieldConditionError: " + "[" +e.getField() + "] " + e.getDefaultMessage()
 			);
 		}
 		if(registrator.checkUsernameDuplication(data.getUsername())) {
-			return Request.buildBadRequestEntity(
+			return Response.buildBadResponse(
 				1003,"AlreadyExistAccountParam: " + "Username is already used."
 			);
 		}else if(registrator.checkEmailDuplication(data.getEmail())) {
-			return Request.buildBadRequestEntity(
+			return Response.buildBadResponse(
 				1003,"AlreadyExistAccountParam: " + "Email is already used, Only Email can be use once"
 			);
 		}else {
@@ -63,14 +64,13 @@ public class RegistrationController {
 				User user = User.build(data.getUsername(), data.getPassword(), data.getEmail(), data.getDescription());
 				registrator.signup(user);
 			}catch(Exception e) {
-				return Request.buildBadRequestEntity(
+				return Response.buildBadResponse(
 					1003,
 					"AlreadyExistAccountParam: " + "Unknown Account error, maybe it is because of Database Problem"
 				);
 			}
 		}
-		
-		return Request.buildGoodRequestEntity();
+		return Response.buildValidResponseEntity(HttpStatus.OK);
 	}
 
 }

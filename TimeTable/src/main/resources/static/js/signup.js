@@ -21,12 +21,13 @@ function postData(data) {
         parameters: param,
         onSuccess: ajaxSusccess,
         onFailure: ajaxFaulure,
-        onException: ajaxFaulure
+        onException: ajaxFaulure,
+        onComplete: redirect
     });
 }
 
 function ajaxSusccess(response) {
-    alert(response.status);
+    alert("성공적으로 생성되었습니다.");
 }
 
 function ajaxFaulure(response) {
@@ -35,6 +36,10 @@ function ajaxFaulure(response) {
     }else{
     	alert(response.status);
     }
+}
+
+function redirect(response){
+	window.location.href = response.responseJSON.redirect;
 }
 
 function doRegistration() {

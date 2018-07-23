@@ -4,8 +4,9 @@ import java.util.EnumSet;
 
 import org.springframework.security.core.GrantedAuthority;
 
+
 public enum Authority implements GrantedAuthority{
-	ROLE_USER, ROLE_READONLY_USER;
+	READ,WRITE,SUPER;
 
 	@Override
 	public String getAuthority() {
@@ -13,7 +14,7 @@ public enum Authority implements GrantedAuthority{
 	}
 	
 	public static EnumSet<Authority> generateDefaultAuthoritySet(){
-		return EnumSet.allOf(Authority.class);
+		return EnumSet.of(READ,WRITE);
 	}
 
 }

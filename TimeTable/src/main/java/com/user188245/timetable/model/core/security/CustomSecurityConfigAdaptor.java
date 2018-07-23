@@ -20,10 +20,9 @@ public class CustomSecurityConfigAdaptor extends WebSecurityConfigurerAdapter{
 		http
 		.authorizeRequests()
 			//permit All person regardless authority.
-			.antMatchers("/js/**", "/styles/**", "/login", "/signup").permitAll()
+			.antMatchers("/js/**", "/styles/**", "/login", "/signup", "/favicon.png").permitAll()
 			//permit USER regardless authority
-			.anyRequest().hasAuthority("ROLE_USER")
-			.antMatchers("/login", "/signup").not().hasAuthority("ROLE_USER")
+			.anyRequest().hasAuthority("READ")
 			.and()
 		//if not authorized, forword to login page immediately
 		.formLogin()
@@ -33,8 +32,8 @@ public class CustomSecurityConfigAdaptor extends WebSecurityConfigurerAdapter{
 			.and()
 		//logout
 		.logout()
-			.logoutUrl("/login?logout")
-			.logoutSuccessUrl("/login")
+			.logoutUrl("/logout")
+			.logoutSuccessUrl("/login?logout")
 			.invalidateHttpSession(true)
 			.and()
 		//if 

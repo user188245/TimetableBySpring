@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
-
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -58,11 +57,11 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer{
 	
 	@Enumerated(EnumType.ORDINAL)
 	@ElementCollection(targetClass=Authority.class, fetch=FetchType.EAGER)
-	private EnumSet<Authority> authorities;
+	private Set<Authority> authorities;
 	
 	public User() {}
 
-	private User(String username, String password, String email, String description, EnumSet<Authority> authorities) {
+	private User(String username, String password, String email, String description, Set<Authority> authorities) {
 		this.username = username;
 		this.password = passwordEncoder.encode(password);
 		this.email = email;
