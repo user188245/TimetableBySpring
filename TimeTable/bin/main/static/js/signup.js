@@ -39,7 +39,10 @@ function ajaxFaulure(response) {
 }
 
 function redirect(response){
-	window.location.href = response.responseJSON.redirect;
+	var redirect = response.responseJSON.redirect;
+	if(!redirect){
+		window.location.href = response.responseJSON.redirect;
+	}
 }
 
 function doRegistration() {

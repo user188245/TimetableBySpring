@@ -1,17 +1,13 @@
 package com.user188245.timetable.model.dto;
 
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
@@ -24,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
+
+import com.user188245.timetable.model.core.util.AuthorityBitEncoder;
 
 @Entity
 @Validated
@@ -52,12 +50,18 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer{
 	@Size(max=120)
 	private String description;
 	
-	@Autowired
+	@Transient
 	private static PasswordEncoder passwordEncoder;
 	
-	@Enumerated(EnumType.ORDINAL)
-	@ElementCollection(targetClass=Authority.class, fetch=FetchType.EAGER)
-	private Set<Authority> authorities;
+	@Autowired
+	@Transient
+	private static AuthorityBitEncoder authorityBitEncoder;
+	
+	@Transient
+	private Set<? extends GrantedAuthority> authorities;
+	
+	@Column(nullable = false)
+	private long authorityFlag;
 	
 	public User() {}
 
@@ -66,7 +70,7 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer{
 		this.password = passwordEncoder.encode(password);
 		this.email = email;
 		this.description = description;
-		this.authorities = authorities;
+		setAuthorities(authorities);
 	}
 	
 	public static PasswordEncoder getPasswordEncoder() {
@@ -86,6 +90,18 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer{
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
 		return authorities;
+	}
+	
+
+	public void setAuthorities(Set<Authority> authorities) {
+		this.authorities = authorities;
+		authorityFlag = authorityBitEncoder.encode(authorities);
+	}
+	
+	public User flagPatchToSet() {
+		bitEncoderLoad();
+		authorities = authorityBitEncoder.decode(authorityFlag);
+		return this;
 	}
 
 	@Override
@@ -131,14 +147,25 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer{
 		return true;
 	}
 	
+	private static void passwordEncoderLoad() {
+		if(User.passwordEncoder == null) {
+			User.generatePasswordEncoder();
+		}
+	}
+	
+	private static void bitEncoderLoad() {
+		if(authorityBitEncoder == null) {
+			authorityBitEncoder = new AuthorityBitEncoder();
+		}
+	}
+	
 	public static User build(
 			String username, 
 			String password,
 			String email, 
 			String description){
-		if(User.passwordEncoder == null) {
-			User.generatePasswordEncoder();
-		}
+		passwordEncoderLoad();
+		bitEncoderLoad();
 		return new User(username,password,email,description,Authority.generateDefaultAuthoritySet());
 	}
 

@@ -16,17 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-import com.user188245.timetable.controller.exception.BadRequestException;
 import com.user188245.timetable.model.core.security.RegistrationService;
-import com.user188245.timetable.model.dao.UserRepository;
 import com.user188245.timetable.model.dto.RequestUser;
 import com.user188245.timetable.model.dto.Response;
 import com.user188245.timetable.model.dto.User;
 
 @Controller
 public class RegistrationController {
-	
 	
 	
 	@Autowired

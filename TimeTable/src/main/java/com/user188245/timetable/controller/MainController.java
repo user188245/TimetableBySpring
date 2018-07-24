@@ -14,6 +14,11 @@ public class MainController {
         return "redirect:/index";
     }
 	
+	@GetMapping(value = "/null")
+    public String nulltoindex(Model model) {
+        return "redirect:/";
+    }
+	
 	@GetMapping(value = "/index")
     public String index(Model model) {
         return "index";

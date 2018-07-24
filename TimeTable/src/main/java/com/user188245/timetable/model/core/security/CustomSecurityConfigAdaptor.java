@@ -27,7 +27,7 @@ public class CustomSecurityConfigAdaptor extends WebSecurityConfigurerAdapter{
 		//if not authorized, forword to login page immediately
 		.formLogin()
 			.loginPage("/login")
-			.successForwardUrl("/")
+			.defaultSuccessUrl("/")
 			.failureUrl("/login?error")
 			.and()
 		//logout

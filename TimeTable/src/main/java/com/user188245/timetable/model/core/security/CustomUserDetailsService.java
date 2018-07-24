@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService, Registratio
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		try{
-			return userRepository.findByUsername(username).get();
+			return userRepository.findByUsername(username).get().flagPatchToSet();
 		}catch(NoSuchElementException e) {
 			throw new UsernameNotFoundException("the user doesn't exists!");
 		}
