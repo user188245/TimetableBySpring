@@ -249,7 +249,7 @@ function ajaxFaulure(ajax, exception) {
 function initLectures(ajax) {
     // var json = JSON.parse(ajax.responseText);
     var json = JSON.parse(sample);
-    lectureList = json.lectureList;
+    lectureList = json.data;
     prepareLectureView();
 }
 
@@ -266,7 +266,7 @@ document.observe('dom:loaded', function() {
 
 
 var sample = "{\n" +
-    "  \"lectureList\": [\n" +
+    "  \"data\": [\n" +
     "    {\n" +
     "      \"id\": 11,\n" +
     "      \"name\": \"취침학개론\",\n" +
