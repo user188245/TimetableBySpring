@@ -4,7 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import javax.validation.constraints.NotBlank;
 
-public class RequestUser {
+public class RequestUser extends Request{
 	
 	@NotBlank
 	@Size(min=4, max=32)
@@ -18,6 +18,7 @@ public class RequestUser {
 	private String passwordValidation;
 	
 	@Email
+	@NotBlank
 	private String email;
 	
 	@Size(max=120)

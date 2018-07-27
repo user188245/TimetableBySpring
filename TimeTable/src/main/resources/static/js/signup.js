@@ -39,9 +39,9 @@ function ajaxFaulure(response) {
 }
 
 function redirect(response){
-	var redirect = response.responseJSON.redirect;
-	if(!redirect){
-		window.location.href = response.responseJSON.redirect;
+	var redirectUrl = response.responseJSON.redirect;
+	if(redirectUrl != null && !redirectUrl){
+		window.location.href = redirectUrl;
 	}
 }
 

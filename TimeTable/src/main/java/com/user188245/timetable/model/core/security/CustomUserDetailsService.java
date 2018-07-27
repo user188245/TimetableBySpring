@@ -1,5 +1,6 @@
 package com.user188245.timetable.model.core.security;
 
+import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService, Registratio
 	}
 
 	@Override
-	public void signup(User user) throws Exception{
+	public void signup(User user) throws SQLException{
 		try {
 			userRepository.save(user);
 		}catch(Exception e) {

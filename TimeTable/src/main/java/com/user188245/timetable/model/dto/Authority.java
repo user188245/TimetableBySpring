@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 
 public enum Authority implements GrantedAuthority{
-	READ,WRITE,SUPER;
+	ROLE_READ,ROLE_WRITE,ROLE_SUPER;
 	
 	public final static long numberOfItem = Authority.values().length;
 
@@ -18,7 +18,7 @@ public enum Authority implements GrantedAuthority{
 	}
 	
 	public static Set<Authority> generateDefaultAuthoritySet(){
-		return Collections.synchronizedSet(EnumSet.of(READ,WRITE));
+		return Collections.synchronizedSet(EnumSet.of(ROLE_READ,ROLE_WRITE));
 	}
 
 }

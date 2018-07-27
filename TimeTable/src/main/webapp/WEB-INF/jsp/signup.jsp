@@ -18,8 +18,8 @@
 </head>
 <body>
 <h1> Sign-Up </h1>
+<span id="exception"></span><br/>
 <div id="registration">
-	<span id="exception"></span><br/>
 	<label for="id">아이디:</label>
 	<input id="id" type="text" name="${id}" /><br/>
 	<label for="password">비밀번호:</label>

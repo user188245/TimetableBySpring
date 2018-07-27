@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.user188245.timetable.model.dto.Authority;
 import com.user188245.timetable.model.dto.User;
 
-public interface UserRepository extends TimeTableRepository<User>{
+public interface UserRepository extends TimeTableRepository<User, Long>{
 
 	@Query("Select s from User s where s.username = ?1")
 	public Optional<User> findByUsername(String username);

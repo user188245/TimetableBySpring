@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
@@ -19,8 +20,8 @@ public class Lecture extends BasicDTO{
 	
 	private String homepage;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name = "username")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	@JoinColumn(name = "lecture_id")
 	private List<RegularSchedule> scheduleList;
 
 	public Lecture() {}
@@ -48,5 +49,25 @@ public class Lecture extends BasicDTO{
 		return scheduleList;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setInstructor(String instructor) {
+		this.instructor = instructor;
+	}
+
+	public void setHomepage(String homepage) {
+		this.homepage = homepage;
+	}
+
+	public void setScheduleList(List<RegularSchedule> scheduleList) {
+		if(this.scheduleList == null) {
+			this.scheduleList = scheduleList;
+		}else {
+			this.scheduleList.clear();
+			this.scheduleList.addAll(scheduleList);
+		}
+	}
 	
 }

@@ -8,7 +8,7 @@ import com.user188245.timetable.Constant;
 import com.user188245.timetable.model.dto.User;
 
 @Controller
-public class SecurityController {
+public class SecurityMainController {
 
 	@GetMapping(value = "/login")
 	public String login(Model model) {

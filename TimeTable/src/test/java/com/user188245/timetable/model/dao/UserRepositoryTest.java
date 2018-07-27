@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.user188245.timetable.model.dao.UserRepository;
 import com.user188245.timetable.model.dto.IrregularSchedule;
 import com.user188245.timetable.model.dto.ScheduleTime;
 import com.user188245.timetable.model.dto.User;

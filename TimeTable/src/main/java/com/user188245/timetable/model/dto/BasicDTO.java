@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
@@ -16,10 +17,15 @@ public abstract class BasicDTO implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 	
+	@JoinColumn(referencedColumnName = "username")
 	protected String username;
 	
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public Long getId() {

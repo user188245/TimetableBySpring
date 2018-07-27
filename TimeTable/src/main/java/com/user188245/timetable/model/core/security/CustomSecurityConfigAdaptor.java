@@ -22,7 +22,7 @@ public class CustomSecurityConfigAdaptor extends WebSecurityConfigurerAdapter{
 			//permit All person regardless authority.
 			.antMatchers("/js/**", "/styles/**", "/login", "/signup", "/favicon.png").permitAll()
 			//permit USER regardless authority
-			.anyRequest().hasAuthority("READ")
+			.anyRequest().hasAuthority("ROLE_READ")
 			.and()
 		//if not authorized, forword to login page immediately
 		.formLogin()
