@@ -5,7 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.user188245.timetable.Constant;
-import com.user188245.timetable.model.dto.User;
 
 @Controller
 public class SecurityMainController {

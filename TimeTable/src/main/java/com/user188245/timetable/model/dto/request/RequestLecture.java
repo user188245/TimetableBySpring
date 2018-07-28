@@ -1,4 +1,6 @@
-package com.user188245.timetable.model.dto;
+package com.user188245.timetable.model.dto.request;
+
+import com.user188245.timetable.model.dto.Lecture;
 
 public class RequestLecture extends Request{
 	

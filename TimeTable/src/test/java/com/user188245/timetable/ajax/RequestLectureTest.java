@@ -21,9 +21,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.user188245.timetable.base.AbstractCrudTest;
 import com.user188245.timetable.model.dto.Lecture;
 import com.user188245.timetable.model.dto.RegularSchedule;
-import com.user188245.timetable.model.dto.RequestLecture;
 import com.user188245.timetable.model.dto.ScheduleTime;
 import com.user188245.timetable.model.dto.Week;
+import com.user188245.timetable.model.dto.request.RequestLecture;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

@@ -1,4 +1,4 @@
-package com.user188245.timetable.model.core;
+package com.user188245.timetable.model.core.ajax.service;
 
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.user188245.timetable.model.core.exception.BadAccessException;
-import com.user188245.timetable.model.dto.DataResponse;
-import com.user188245.timetable.model.dto.Request;
+import com.user188245.timetable.model.dto.request.Request;
+import com.user188245.timetable.model.dto.response.DataResponse;
 
 @RestController
 public interface CrudService<RQ extends Request, T, K> {

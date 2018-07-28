@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.user188245.timetable.base.AbstractStandaloneTest;
 import com.user188245.timetable.controller.ajax.RegistrationController;
-import com.user188245.timetable.model.dto.RequestUser;
+import com.user188245.timetable.model.dto.request.RequestUser;
 
 
 

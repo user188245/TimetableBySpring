@@ -11,8 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.user188245.timetable.model.core.exception.BadAccessException;
-import com.user188245.timetable.model.dto.Request;
-import com.user188245.timetable.model.dto.Response;
+import com.user188245.timetable.model.dto.request.Request;
+import com.user188245.timetable.model.dto.response.Response;
 
 public interface SecurityCrudController<T extends Request ,K> {
 	

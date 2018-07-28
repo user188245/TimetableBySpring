@@ -1,8 +1,8 @@
-package com.user188245.timetable.model.dto;
+package com.user188245.timetable.model.dto.request;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Size;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class RequestUser extends Request{
 	

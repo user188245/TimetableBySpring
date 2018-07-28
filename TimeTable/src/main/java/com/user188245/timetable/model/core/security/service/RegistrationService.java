@@ -1,4 +1,4 @@
-package com.user188245.timetable.model.core.security;
+package com.user188245.timetable.model.core.security.service;
 
 import java.sql.SQLException;
 

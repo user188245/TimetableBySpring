@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.user188245.timetable.model.dto.Authority;
 import com.user188245.timetable.model.dto.User;
 
 public interface UserRepository extends TimeTableRepository<User, Long>{

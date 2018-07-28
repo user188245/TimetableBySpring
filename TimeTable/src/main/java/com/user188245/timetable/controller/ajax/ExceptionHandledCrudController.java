@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.user188245.timetable.controller.MainController;
 import com.user188245.timetable.model.core.exception.CustomException;
-import com.user188245.timetable.model.dto.BasicDTO;
-import com.user188245.timetable.model.dto.Request;
-import com.user188245.timetable.model.dto.Response;
+import com.user188245.timetable.model.dto.request.Request;
+import com.user188245.timetable.model.dto.response.Response;
 
 public abstract class ExceptionHandledCrudController<T extends Request> implements SecurityCrudController<T, Long> {
 	

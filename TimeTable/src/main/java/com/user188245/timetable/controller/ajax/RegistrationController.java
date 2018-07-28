@@ -1,11 +1,8 @@
 package com.user188245.timetable.controller.ajax;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.NoSuchElementException;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -26,10 +23,10 @@ import com.user188245.timetable.model.core.exception.AlreadyExistAccountParamExc
 import com.user188245.timetable.model.core.exception.CustomException;
 import com.user188245.timetable.model.core.exception.FieldConditionException;
 import com.user188245.timetable.model.core.exception.PasswordInvalidationException;
-import com.user188245.timetable.model.core.security.RegistrationService;
-import com.user188245.timetable.model.dto.RequestUser;
-import com.user188245.timetable.model.dto.Response;
+import com.user188245.timetable.model.core.security.service.RegistrationService;
 import com.user188245.timetable.model.dto.User;
+import com.user188245.timetable.model.dto.request.RequestUser;
+import com.user188245.timetable.model.dto.response.Response;
 
 @Controller
 public class RegistrationController {

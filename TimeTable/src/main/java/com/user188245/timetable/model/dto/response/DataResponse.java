@@ -1,4 +1,4 @@
-package com.user188245.timetable.model.dto;
+package com.user188245.timetable.model.dto.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

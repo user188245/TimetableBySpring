@@ -1,4 +1,4 @@
-package com.user188245.timetable.model.core;
+package com.user188245.timetable.model.core.ajax.service;
 
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import com.user188245.timetable.model.core.exception.BadAccessException;
 import com.user188245.timetable.model.dao.LectureRepository;
 import com.user188245.timetable.model.dao.RegularScheduleRepository;
-import com.user188245.timetable.model.dto.DataResponse;
 import com.user188245.timetable.model.dto.Lecture;
 import com.user188245.timetable.model.dto.RegularSchedule;
-import com.user188245.timetable.model.dto.RequestLecture;
+import com.user188245.timetable.model.dto.request.RequestLecture;
+import com.user188245.timetable.model.dto.response.DataResponse;
 
 @Service
 public class LectureService implements CrudService<RequestLecture,Lecture, Long>{

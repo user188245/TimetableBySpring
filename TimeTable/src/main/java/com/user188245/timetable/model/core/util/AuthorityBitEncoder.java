@@ -5,7 +5,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import com.user188245.timetable.model.dto.Authority;
 
