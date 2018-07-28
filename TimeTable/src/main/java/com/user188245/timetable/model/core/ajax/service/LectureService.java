@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.user188245.timetable.model.core.exception.BadAccessException;
 import com.user188245.timetable.model.dao.LectureRepository;
@@ -25,7 +26,7 @@ public class LectureService implements CrudService<RequestLecture,Lecture, Long>
 	RegularScheduleRepository regularScheduleRepository;
 	
 	@Override
-	public ResponseEntity<DataResponse<Lecture>> read(String username, Long key) throws BadAccessException, SQLException{
+	public ResponseEntity<DataResponse<Lecture>> read(String username, @RequestParam(value="id",required = false) Long key) throws BadAccessException, SQLException{
 		Lecture lecture = lectureRepository.find(username, key);
 		return DataResponse.build(lecture);
 	}

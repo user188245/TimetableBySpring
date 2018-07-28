@@ -85,8 +85,7 @@ function makeCalendar(date) {
 
 //method : get/add/modify/remove
 
-function SendSchedule(tableName,schedule,date) {
-    this.tableName = tableName;
+function SendSchedule(schedule,date) {
     this.schedule = schedule;
     this.date = date;
 }
@@ -189,7 +188,7 @@ function reportAdder(event) {
         method = "modify";
     }
     prepareScheduleView();
-    var send = new SendSchedule("N/A",schedule,null);
+    var send = new SendSchedule(schedule,null);
     postData(method,send);
     popup.style.setProperty("display","none");
     makeCalendar(currentDate);
@@ -201,7 +200,7 @@ function removeSchedule(event) {
         var schedule = scheduleList[currentDate.getDate()][this.index];
         scheduleList[currentDate.getDate()].splice(this.index, 1);
         prepareScheduleView();
-        var send = new SendSchedule("N/A",schedule.id,null);
+        var send = new SendSchedule(schedule.id,null);
         postData("remove",send);
         makeCalendar(currentDate);
     }
@@ -227,7 +226,7 @@ function postSuccess(ajax) {
 }
 
 function init(){
-    var data = new SendSchedule("N/A",null,currentDate.toISOString());
+    var data = new SendSchedule(null,currentDate.toISOString());
 
     var csrftoken = "REMOVE_THIS";
     var param = "csrfmiddlewaretoken=" + csrftoken + "&method=" + "get" +"&data=" + JSON.stringify(data);

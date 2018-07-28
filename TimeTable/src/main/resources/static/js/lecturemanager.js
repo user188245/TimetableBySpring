@@ -131,12 +131,12 @@ function reportAdder(event) {
     var method = "N/A";
     if(mode === 1) {
         lectureList.push(lecture);
-        method = "add";
+        method = "post";
     }
     else if(mode === 2){
         lecture.id = targetID;
         lectureList[target] = lecture;
-        method = "modify";
+        method = "patch";
     }
     prepareLectureView();
     var send = new SendLecture(lecture);

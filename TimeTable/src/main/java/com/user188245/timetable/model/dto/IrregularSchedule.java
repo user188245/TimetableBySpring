@@ -1,8 +1,12 @@
 package com.user188245.timetable.model.dto;
 
-import java.sql.Date;
 
+import java.time.LocalDate;
+
+import javax.persistence.Convert;
 import javax.persistence.Entity;
+
+import com.user188245.timetable.model.core.LocalDateAttributeConverter;
 
 
 @Entity
@@ -14,11 +18,12 @@ public class IrregularSchedule extends Schedule{
 	
 	private String text;
 	
-	private Date date;
+	@Convert(converter = LocalDateAttributeConverter.class)
+	private LocalDate date;
 	
 	public IrregularSchedule() {super();}
 	
-	public IrregularSchedule(String name, String location, ScheduleTime scheduleTime, Date date, String text) {
+	public IrregularSchedule(String name, String location, ScheduleTime scheduleTime, LocalDate date, String text) {
 		super(scheduleTime, location);
 		this.name = name;
 		this.text = text;
@@ -29,7 +34,7 @@ public class IrregularSchedule extends Schedule{
 		super(scheduleTime, location);
 		this.name = name;
 		this.text = text;
-		this.date = Date.valueOf(date);
+		this.date = LocalDate.parse(date);
 	}
 
 	public String getName() {
@@ -53,10 +58,10 @@ public class IrregularSchedule extends Schedule{
 	}
 
 	public void setDate(String dateFormat) {
-		this.date = Date.valueOf(dateFormat);
+		this.date = LocalDate.parse(text);
 	}
 	
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	

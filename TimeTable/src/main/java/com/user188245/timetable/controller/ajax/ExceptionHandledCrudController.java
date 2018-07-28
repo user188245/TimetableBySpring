@@ -1,6 +1,7 @@
 package com.user188245.timetable.controller.ajax;
 
 import java.sql.SQLException;
+import java.time.format.DateTimeParseException;
 import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
@@ -55,6 +56,14 @@ public abstract class ExceptionHandledCrudController<T extends Request> implemen
 		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
 		logger.error("check : ", e);
 		return Response.buildBadResponse(1050, "Check if there is missing parameters. See : " + e.getLocalizedMessage());
+	}
+	
+	@ResponseBody
+	@ExceptionHandler(DateTimeParseException.class)
+	public ResponseEntity<Response> dateTimeParseExceptionHandler(DateTimeParseException e) {
+		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
+		logger.error("check : ", e);
+		return Response.buildBadResponse(1008, "Wrong Date Format, must be (\"yyyy-MM-dd\"). See : " + e.getLocalizedMessage());
 	}
 	
 	
