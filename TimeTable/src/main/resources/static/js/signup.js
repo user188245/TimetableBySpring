@@ -34,15 +34,15 @@ function ajaxFaulure(response) {
     if(response.status == 400) {
         $("exception").innerText = "ERR : " + response.responseJSON.errorCode + "\nCause : " + response.responseJSON.message;
     }else{
-    	alert(response.status);
+        alert(response.status);
     }
 }
 
 function redirect(response){
-	var redirectUrl = response.responseJSON.redirect;
-	if(redirectUrl != null && !redirectUrl){
-		window.location.href = redirectUrl;
-	}
+    var redirectUrl = response.responseJSON.redirect;
+    if(redirectUrl != null && !redirectUrl){
+        window.location.href = redirectUrl;
+    }
 }
 
 function doRegistration() {

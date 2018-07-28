@@ -7,15 +7,15 @@ var mode = 0;
 var target = 0;
 var targetID;
 
-function SendLecture(tableName,lecture) {
-    this.tableName = tableName;
+function SendLecture(lecture) {
     this.lecture = lecture;
 }
 
 function dragElement(event) {
     var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    if ($("addpopup_header")) {
-        $("addpopup_header").onmousedown = dragMouseDown;
+    var ap_header = $("addpopup_header");
+    if (ap_header) {
+        ap_header.onmousedown = dragMouseDown;
     } else {
         event.onmousedown = dragMouseDown;
     }
@@ -108,7 +108,6 @@ function closeAdder(event) {
 }
 
 function modifyAdder() {
-    //alert(this.lecture.name);
     refreshAdder();
     $("lec_add_name").value = this.lecture.name;
     $("lec_add_instructor").value = this.lecture.instructor;
@@ -140,8 +139,8 @@ function reportAdder(event) {
         method = "modify";
     }
     prepareLectureView();
-    var send = new SendLecture("N/A",lecture);
-    postData(method,send);
+    var send = new SendLecture(lecture);
+    doAjax(method,send,true,null);
     popup.style.setProperty("display","none");
     mode = 0;
 }
@@ -154,8 +153,8 @@ function addTime(event) {
         var startMinute = $("lec_add_timeStart").valueAsDate.getMinutes();
         var endHour = $("lec_add_timeEnd").valueAsDate.getUTCHours();
         var endMinute = $("lec_add_timeEnd").valueAsDate.getMinutes();
-        var s = new RegularSchedule(new ScheduleTime(startHour,startMinute,endHour,endMinute),week,location,false,lecture);
-        tempTimeList[tempTimeList.length] = s;
+        var schedule = new RegularSchedule(new ScheduleTime(startHour,startMinute,endHour,endMinute),week,location,false,lecture);
+        tempTimeList[tempTimeList.length] = schedule;
         prepareTimeView();
     }catch(e){
         alert(e.message);
@@ -168,8 +167,7 @@ function removeLecture(event) {
         var lecture = lectureList[index];
         lectureList.splice(index, 1);
         prepareLectureView();
-        var send = new SendLecture("N/A",lecture.id);
-        postData("remove",send);
+        doAjax("delete",{id: lecture.id},false,null);
     }
 }
 
@@ -204,56 +202,37 @@ function prepareTimeView(){
     }
 }
 
-function postData(method,data) {
-    var csrftoken = "REMOVE_THIS";
-    var param = "csrfmiddlewaretoken=" + csrftoken + "&method=" + method +"&data=" + JSON.stringify(data);
-    // new Ajax.request("????", {
-    //     method: "post",
-    //     parameters: param,
-    //     onSuccess: postSuccess,
-    //     onFailure: ajaxFaulure,
-    //     onException: ajaxFaulure
-    // })
-    $("testing").innerText = param;
-}
-
-function postSuccess(ajax) {
-    alert("성공적으로 요청되었습니다.");
+function doAjax(method,data,isJson,ajaxSusccess) {
+    var csrf = $("csrf").getAttribute("content");
+    var csrf_header = $("csrf_header").getAttribute("content");
+    var param = (isJson)?JSON.stringify(data):data;
+    new Ajax.Request("/ajax/lecture", {
+        method: method,
+        requestHeaders: [csrf_header,csrf],
+        contentType:(isJson)?"application/json":"application/x-www-form-urlencoded",
+        parameters: param,
+        onSuccess: ajaxSusccess,
+        onFailure: ajaxFaulure,
+        onException: ajaxFaulure
+    });
 }
 
 function init(){
-    var data = new SendLecture("N/A",null);
-
-    var csrftoken = "REMOVE_THIS";
-    var param = "csrfmiddlewaretoken=" + csrftoken + "&method=" + "get" +"&data=" + JSON.stringify(data);
-
-
-    // new Ajax.request("????", {
-    //     method: "post",
-    //     parameters: param,
-    //     onSuccess: initLectures,
-    //     onFailure: ajaxFaulure,
-    //     onException: ajaxFaulure
-    // })
-    $("testing").innerText = param;
-    initLectures();
+    doAjax("get",null,false,initLectures);
 }
 
 function ajaxFaulure(ajax, exception) {
     alert("Error : \n[Server_status]:" +  ajax.status + "\n[message]:" + ajax.responseText);
-    if(exception){wj
+    if(exception){
         throw exception;
     }
 }
 
-function initLectures(ajax) {
-    // var json = JSON.parse(ajax.responseText);
-    var json = JSON.parse(sample);
+function initLectures(response) {
+    var json = response.responseJSON;
     lectureList = json.data;
     prepareLectureView();
 }
-
-
 
 document.observe('dom:loaded', function() {
     $("lecture_add").observe("click",openAdder);
@@ -266,7 +245,7 @@ document.observe('dom:loaded', function() {
 
 
 var sample = "{\n" +
-    "  \"data\": [\n" +
+    "  \"lectureList\": [\n" +
     "    {\n" +
     "      \"id\": 11,\n" +
     "      \"name\": \"취침학개론\",\n" +
