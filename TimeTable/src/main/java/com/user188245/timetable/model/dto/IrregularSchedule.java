@@ -23,14 +23,14 @@ public class IrregularSchedule extends Schedule{
 	
 	public IrregularSchedule() {super();}
 	
-	public IrregularSchedule(String name, String location, ScheduleTime scheduleTime, LocalDate date, String text) {
-		super(scheduleTime, location);
-		this.name = name;
-		this.text = text;
-		this.date = date;
-	}
+//	public IrregularSchedule(String name, String location, ScheduleTime scheduleTime, String text, LocalDate date) {
+//		super(scheduleTime, location);
+//		this.name = name;
+//		this.text = text;
+//		this.date = date;
+//	}
 
-	public IrregularSchedule(String name, String location, ScheduleTime scheduleTime, String date, String text) {
+	public IrregularSchedule(String name, String location, ScheduleTime scheduleTime,String text, String date) {
 		super(scheduleTime, location);
 		this.name = name;
 		this.text = text;
@@ -58,12 +58,12 @@ public class IrregularSchedule extends Schedule{
 	}
 
 	public void setDate(String dateFormat) {
-		this.date = LocalDate.parse(text);
+		this.date = LocalDate.parse(dateFormat);
 	}
 	
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
+//	public void setDate(LocalDate date) {
+//		this.date = date;
+//	}
 	
 
 }

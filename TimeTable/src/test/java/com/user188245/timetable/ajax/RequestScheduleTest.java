@@ -7,41 +7,39 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.user188245.timetable.base.AbstractCrudTest;
-import com.user188245.timetable.model.dto.Lecture;
-import com.user188245.timetable.model.dto.RegularSchedule;
+import com.user188245.timetable.model.dto.IrregularSchedule;
 import com.user188245.timetable.model.dto.ScheduleTime;
-import com.user188245.timetable.model.dto.Week;
-import com.user188245.timetable.model.dto.request.RequestLecture;
+import com.user188245.timetable.model.dto.request.RequestSchedule;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration
-public class RequestLectureTest extends AbstractCrudTest{
+public class RequestScheduleTest extends AbstractCrudTest{
 	
-	protected String targetURI = "/ajax/lecture";
+	protected String targetURI = "/ajax/calendar";
 	
 	private long id = 1;
+	
+	private static final String time0 = "2020-12-01";
+	private static final String time1 = "2020-11-28";
+	private static final String time2 = "2020-12-15";
 
 	@Override
 	public void createTest() throws Exception {
-		Lecture l = createLectureExample();
-		l.setId(id);
-		RequestLecture lecture = new RequestLecture(l);
-		String json = toJson(lecture);
+		IrregularSchedule schedule = createScheduleExample();
+		RequestSchedule request = new RequestSchedule(schedule);
+		String json = toJson(request);
 		
-		getMockMvc().perform(post(targetURI)
+		this.getMockMvc().perform(
+				post(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
 				.contentType("application/json")
@@ -49,64 +47,71 @@ public class RequestLectureTest extends AbstractCrudTest{
 		)
 		.andExpect(authenticated().withUsername(username))
 		.andExpect(jsonPath("$.errorCode").value(0))
-		.andExpect(status().isOk());
+		.andExpect(status().isOk())
+		.andDo(print());
 	}
-	
+
 	@Override
 	public void readTest() throws Exception {
-		getMockMvc().perform(get(targetURI)
+		this.getMockMvc().perform(
+				get(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
+				.param("time", time2)
 		)
-		.andExpect(status().isOk())
 		.andExpect(authenticated().withUsername(username))
 		.andExpect(jsonPath("$.errorCode").value(0))
-		.andExpect(jsonPath("$.data[0].id").isNotEmpty())
-		.andExpect(jsonPath("$.data[0].name").value("취침학개론"));
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.data").isNotEmpty())
+		.andExpect(jsonPath("$.data[0].id").exists())
+		.andExpect(jsonPath("$.data[0].id").isNumber())
+		.andExpect(jsonPath("$.data[0].location").value("장소"))
+		.andDo(print());
 	}
 
 	@Override
 	public void updateTest() throws Exception {
-		Lecture l = createLectureExample();
-		l.setId(id);
-		l.setName("취침학원론");
-		l.setInstructor("최아무개");
-		l.getScheduleList().get(1).setLocation("쾌몽관 1층 숙면홀");
-		RequestLecture lecture = new RequestLecture(l);
-		String json = toJson(lecture);
+		// TODO Auto-generated method stub
+		IrregularSchedule schedule = createScheduleExample();
+		schedule.setId(id);
+		schedule.setDate(time1);
+		schedule.setLocation("변경된 장소");
+		schedule.setName(null);
+		RequestSchedule request = new RequestSchedule(schedule);
+		String json = toJson(request);
 		
-		getMockMvc().perform(patch(targetURI)
+		this.getMockMvc().perform(
+				patch(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
 				.contentType("application/json")
 				.content(json)
 		)
-		.andExpect(status().isOk())
 		.andExpect(authenticated().withUsername(username))
-		.andExpect(jsonPath("$.errorCode").value(0));
+		.andExpect(jsonPath("$.errorCode").value(0))
+		.andExpect(status().isOk())
+		.andDo(print());
 	}
 
 	@Override
 	public void deleteTest() throws Exception {
-		getMockMvc().perform(delete(targetURI)
+		// TODO Auto-generated method stub
+		getMockMvc().perform(
+				delete(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
-				.param("id", "1")
+				.param("id", String.valueOf(id))
 		)
-		.andExpect(status().isOk())
 		.andExpect(authenticated().withUsername(username))
-		.andExpect(jsonPath("$.errorCode").value(0));
+		.andExpect(jsonPath("$.errorCode").value(0))
+		.andExpect(status().isOk())
+		.andDo(print());
 	}
-
 	
-	private Lecture createLectureExample() {
-		List<RegularSchedule> schedule = new ArrayList<>();
-		schedule.add(new RegularSchedule("제1 취침관 201호", new ScheduleTime(10,0,11,30), Week.Monday, false));
-		schedule.add(new RegularSchedule("제3 숙면관 403호", new ScheduleTime(10,0,12,30), Week.Wednesday, false));
-		return new Lecture("취침학개론","최드르렁","http://homepage.com",schedule);
+	private IrregularSchedule createScheduleExample() {
+		return new IrregularSchedule("이름","장소",new ScheduleTime(12,0,14,0),"메모",time0);
 	}
-
-
+	
 	
 
 }

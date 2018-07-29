@@ -22,7 +22,7 @@ public class IrregularScheduleRepositoryTest {
 	@Test
 	public void test() {
 		//Insertion
-		IrregularSchedule dto = new IrregularSchedule("임시일정0", "장소0", new ScheduleTime(10,0,11,30), "2017-12-30", "메모0");
+		IrregularSchedule dto = new IrregularSchedule("임시일정0", "장소0", new ScheduleTime(10,0,11,30), "메모0", "2017-12-30");
 		dto = dao.save(dto);
 		long id = dto.getId();
 		

@@ -11,16 +11,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.user188245.timetable.model.core.ajax.service.ScheduleService;
 import com.user188245.timetable.model.core.exception.BadAccessException;
 import com.user188245.timetable.model.dto.request.RequestSchedule;
 import com.user188245.timetable.model.dto.response.Response;
 
+@RestController
+@RequestMapping("/ajax/calendar")
 public class ScheduleController extends ExceptionHandledCrudController<RequestSchedule>{
 	
 	@Autowired
@@ -43,6 +48,7 @@ public class ScheduleController extends ExceptionHandledCrudController<RequestSc
 	}
 	
 
+	@GetMapping
 	public ResponseEntity<? extends Response> readAll(
 			Principal principal, 
 			@RequestParam(value="id",required = false) Long id, 

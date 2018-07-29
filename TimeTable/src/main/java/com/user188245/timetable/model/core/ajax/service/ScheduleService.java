@@ -1,13 +1,12 @@
 package com.user188245.timetable.model.core.ajax.service;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import com.user188245.timetable.model.core.exception.BadAccessException;
 import com.user188245.timetable.model.dao.IrregularScheduleRepository;
@@ -16,6 +15,7 @@ import com.user188245.timetable.model.dto.ScheduleTime;
 import com.user188245.timetable.model.dto.request.RequestSchedule;
 import com.user188245.timetable.model.dto.response.DataResponse;
 
+@Service
 public class ScheduleService implements CrudService<RequestSchedule,IrregularSchedule,Long>{
 
 	@Autowired
@@ -53,16 +53,16 @@ public class ScheduleService implements CrudService<RequestSchedule,IrregularSch
 			throws BadAccessException, NoSuchElementException, SQLException {
 		IrregularSchedule target = request.getSchedule();
 		IrregularSchedule schedule = irregularScheduleRepository.findById(target.getId()).get();
-		if(schedule.getName() != null) {
+		if(target.getName() != null) {
 			schedule.setName(target.getName());
 		}
-		if(schedule.getLocation() != null) {
+		if(target.getLocation() != null) {
 			schedule.setLocation(target.getLocation());
 		}
-		if(schedule.getText() != null) {
+		if(target.getText() != null) {
 			schedule.setText(target.getText());
 		}
-		if(schedule.getScheduleTime() != null) {
+		if(target.getScheduleTime() != null) {
 			ScheduleTime sc0 = schedule.getScheduleTime();
 			ScheduleTime sc1 = target.getScheduleTime();
 			sc0.setTime(sc1.getStartHour(), sc1.getStartMinute(), sc1.getEndHour(), sc1.getEndMinute());

@@ -5,6 +5,8 @@ import com.user188245.timetable.model.dto.Lecture;
 public class RequestLecture extends Request{
 	
 	private Lecture lecture;
+	
+	public RequestLecture() {}
 
 	public RequestLecture(Lecture lecture) {
 		this.lecture = lecture;

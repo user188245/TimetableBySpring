@@ -24,10 +24,8 @@ public class RequestUser extends Request{
 	@Size(max=120)
 	private String description;
 	
-	public RequestUser() {
-		
-	}
-
+	public RequestUser() {}
+	
 	public RequestUser(String username, String password, String passwordValidation, String email, String description) {
 		this.username = username;
 		this.password = password;
