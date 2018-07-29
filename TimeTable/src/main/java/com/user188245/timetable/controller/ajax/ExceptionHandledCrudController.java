@@ -25,21 +25,21 @@ public abstract class ExceptionHandledCrudController<T extends Request> implemen
 	@ExceptionHandler(CustomException.class)
 	public ResponseEntity<Response> customExceptionHandler(CustomException e) {
 		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
-		return Response.buildBadResponse(e.getErrorCode(), e.getMessage());
+		return Response.buildInvalidResponseEntity(e.getErrorCode(), e.getMessage(), null, e.getStatus());
 	}
 	
 	@ResponseBody
 	@ExceptionHandler(SQLException.class)
 	public ResponseEntity<Response> sqlExceptionHandler(SQLException e) {
 		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
-		return Response.buildBadResponse(1006, "Wrong DB Access or Transaction");
+		return Response.buildInvalidResponseEntity(1006, "Wrong DB Access or Transaction", null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ResponseBody
 	@ExceptionHandler(NoSuchElementException.class)
 	public ResponseEntity<Response> noSuchElementExceptionHandler(NoSuchElementException e) {
 		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
-		return Response.buildInvalidResponseEntity(1007, "Not Found", HttpStatus.NOT_FOUND);
+		return Response.buildInvalidResponseEntity(1007, "Not Found", null, HttpStatus.NOT_FOUND);
 	}
 	
 	@ResponseBody

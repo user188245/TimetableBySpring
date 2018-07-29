@@ -34,7 +34,7 @@ public class RegistrationController {
 	@Autowired
 	private RegistrationService registrator;
 	
-	private final Logger logger = LoggerFactory.getLogger(MainController.class);
+	private final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 	
 	@PostMapping(value="/signup")
 	@ResponseBody
@@ -60,7 +60,7 @@ public class RegistrationController {
 				throw new AlreadyExistAccountParamException("Unknown Account error, maybe it is because of Database Problem");
 			}
 		}
-		return Response.buildValidResponseEntity(HttpStatus.OK);
+		return Response.buildValidResponseEntity(HttpStatus.OK, "/login");
 	}
 	
 	@ResponseBody

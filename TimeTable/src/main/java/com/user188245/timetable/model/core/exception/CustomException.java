@@ -1,5 +1,7 @@
 package com.user188245.timetable.model.core.exception;
 
+import org.springframework.http.HttpStatus;
+
 public abstract class CustomException extends Exception {
 
 	/**
@@ -12,5 +14,7 @@ public abstract class CustomException extends Exception {
 	}
 	
 	public abstract int getErrorCode();
+	
+	public abstract HttpStatus getStatus();
 
 }

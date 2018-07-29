@@ -82,14 +82,9 @@ function makeCalendar(date) {
     }
 }
 
-
-//method : get/add/modify/remove
-
-function SendSchedule(schedule,date) {
+function SendSchedule(schedule) {
     this.schedule = schedule;
-    this.date = date;
 }
-
 
 function prepareScheduleView(){
     clearElement("s_list");
@@ -99,7 +94,6 @@ function prepareScheduleView(){
 
             var li = document.createElement("li");
             var s = scheduleList[currentDate.getDate()][i];
-
 
             li.appendChild(document.createTextNode(s.name));
             li.setAttribute("class", "w3-hover-green w3-border");
@@ -126,7 +120,6 @@ function prepareScheduleView(){
         alert(e.message);
     }
 }
-
 
 function refreshAdder(){
     $("s_add_name").value = "";
@@ -180,16 +173,16 @@ function reportAdder(event) {
     var method = "N/A";
     if(mode === 1) {
         scheduleList[currentDate.getDate()].push(schedule);
-        method = "add";
+        method = "post";
     }
     else if(mode === 2){
         schedule.id = targetID;
         scheduleList[currentDate.getDate()][target] = schedule;
-        method = "modify";
+        method = "patch";
     }
     prepareScheduleView();
-    var send = new SendSchedule(schedule,null);
-    postData(method,send);
+    var send = new SendSchedule(schedule);
+    doAjax(method,send,true,postSuccess);
     popup.style.setProperty("display","none");
     makeCalendar(currentDate);
     mode = 0;
@@ -200,47 +193,32 @@ function removeSchedule(event) {
         var schedule = scheduleList[currentDate.getDate()][this.index];
         scheduleList[currentDate.getDate()].splice(this.index, 1);
         prepareScheduleView();
-        var send = new SendSchedule(schedule.id,null);
-        postData("remove",send);
-        makeCalendar(currentDate);
+        doAjax("delete",{id:schedule.id},false,postSuccess);
     }
 }
 
-function postData(method,data) {
-    var csrftoken = "REMOVE_THIS";
-    var param = "csrfmiddlewaretoken=" + csrftoken + "&method=" + method +"&data=" + JSON.stringify(data);
-
-    // new Ajax.request("????", {
-    //     method: "post",
-    //     parameters: param,
-    //     onSuccess: postSuccess,
-    //     onFailure: ajaxFaulure,
-    //     onException: ajaxFaulure
-    // })
-    $("testing").innerText = param;
-
+function doAjax(method,data,isJson,ajaxSusccess) {
+    var csrf = $("csrf").getAttribute("content");
+    var csrf_header = $("csrf_header").getAttribute("content");
+    var param = (isJson)?JSON.stringify(data):data;
+    new Ajax.Request("/ajax/calendar", {
+        method: method,
+        requestHeaders: [csrf_header,csrf],
+        contentType:(isJson)?"application/json":"application/x-www-form-urlencoded",
+        parameters: param,
+        onSuccess: ajaxSusccess,
+        onFailure: ajaxFaulure,
+        onException: ajaxFaulure
+    });
 }
 
 function postSuccess(ajax) {
     alert("성공적으로 요청되었습니다.");
+    makeCalendar(currentDate);
 }
 
 function init(){
-    var data = new SendSchedule(null,currentDate.toISOString());
-
-    var csrftoken = "REMOVE_THIS";
-    var param = "csrfmiddlewaretoken=" + csrftoken + "&method=" + "get" +"&data=" + JSON.stringify(data);
-
-
-    // new Ajax.request("????", {
-    //     method: "post",
-    //     parameters: param,
-    //     onSuccess: initSchedules,
-    //     onFailure: ajaxFaulure,
-    //     onException: ajaxFaulure
-    // })
-    $("testing").innerText = param;
-    initSchedules();
+    doAjax("get",{date:currentDate.toISOString()},false,initSchedules);
 }
 
 function ajaxFaulure(ajax, exception) {
@@ -251,24 +229,16 @@ function ajaxFaulure(ajax, exception) {
 }
 
 function initSchedules(ajax) {
-    // var json = JSON.parse(ajax.responseText);
-    var json = JSON.parse(sample);
-    var jscheduleList = json.scheduleList;
+    var json = ajax.responseJSON;
+    var jscheduleList = json.data;
     for(var i=1; i<=31; i++)
         scheduleList[i] = [];
     for(var i=0; i<jscheduleList.length; i++){
         var s = jscheduleList[i];
         var schedule = buildInstance(s, IrregularSchedule);
-        //var schedule = new IrregularSchedule(s.name,s.location,s.text,s.scheduleTime,new Date(s.date),null,s.id);
         scheduleList[schedule.date.getDate()].push(schedule);
     }
 }
-
-
-
-
-
-
 
 document.observe('dom:loaded', function() {
     currentDate = new Date();
@@ -285,9 +255,6 @@ document.observe('dom:loaded', function() {
     $("s_add_ok").observe("click",reportAdder);
     init();
     makeCalendar(currentDate);
-    //alert("첫번째날 요일 : " + Week[startWeek] + "," + "최대 날 : " + maxDate);
-
-
 });
 
 

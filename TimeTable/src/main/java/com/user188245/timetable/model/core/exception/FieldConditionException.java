@@ -1,5 +1,7 @@
 package com.user188245.timetable.model.core.exception;
 
+import org.springframework.http.HttpStatus;
+
 public class FieldConditionException extends CustomException {
 
 	/**
@@ -18,6 +20,11 @@ public class FieldConditionException extends CustomException {
 	public int getErrorCode() {
 		// TODO Auto-generated method stub
 		return errorCode;
+	}
+	
+	@Override
+	public HttpStatus getStatus() {
+		return HttpStatus.BAD_REQUEST;
 	}
 
 }
