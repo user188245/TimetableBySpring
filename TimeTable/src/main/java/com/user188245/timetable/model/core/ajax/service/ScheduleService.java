@@ -40,14 +40,14 @@ public class ScheduleService implements CreatableService<RequestSchedule,Irregul
 	}
 
 	@Override
-	public void create(String username, RequestSchedule request) throws BadAccessException, SQLException {
+	public Long create(String username, RequestSchedule request) throws BadAccessException, SQLException {
 		// TODO Auto-generated method stub
 		request.getSchedule().setUsername(username);
-		irregularScheduleRepository.save(username, request.getSchedule());
+		return irregularScheduleRepository.save(username, request.getSchedule()).getId();
 	}
 
 	@Override
-	public void update(String username, RequestSchedule request)
+	public Long update(String username, RequestSchedule request)
 			throws BadAccessException, NoSuchElementException, SQLException {
 		IrregularSchedule target = request.getSchedule();
 		IrregularSchedule schedule = irregularScheduleRepository.findById(target.getId()).get();
@@ -65,7 +65,7 @@ public class ScheduleService implements CreatableService<RequestSchedule,Irregul
 			ScheduleTime sc1 = target.getScheduleTime();
 			sc0.setTime(sc1.getStartHour(), sc1.getStartMinute(), sc1.getEndHour(), sc1.getEndMinute());
 		}
-		irregularScheduleRepository.save(username, schedule);
+		return irregularScheduleRepository.save(username, schedule).getId();
 	}
 
 	@Override

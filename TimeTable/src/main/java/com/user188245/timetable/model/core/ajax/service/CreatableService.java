@@ -13,6 +13,6 @@ import com.user188245.timetable.model.dto.request.Request;
 public interface CreatableService<RQ extends Request, T, K> {
 	
 	@Secured("ROLE_WRITE")
-	public void create(String username, @RequestBody RQ request) throws BadAccessException,SQLException;
+	public K create(String username, @RequestBody RQ request) throws BadAccessException,SQLException;
 
 }

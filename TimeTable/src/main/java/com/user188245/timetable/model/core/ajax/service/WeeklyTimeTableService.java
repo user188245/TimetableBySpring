@@ -51,14 +51,15 @@ public class WeeklyTimeTableService implements SingleReadableService<WeeklyTimeT
 	}
 
 	@Override
-	public void update(String username, RequestWeeklyTimeTable request)
+	public Long update(String username, RequestWeeklyTimeTable request)
 			throws BadAccessException, NoSuchElementException, SQLException {
 		// TODO Auto-generated method stub
 		RegularSchedule regularSchedule = regularScheduleRepository.findById(request.getId()).get();
 		if(request.isActivated() ^ regularSchedule.isCanceled() == true) {
 			regularSchedule.toggleCanceled();
-			regularScheduleRepository.save(regularSchedule);
+			return regularScheduleRepository.save(regularSchedule).getId();
 		}
+		return request.getId();
 	}
 	
 	private WeeklyTimeTable buildWeeklyTimeTable(String username, LocalDate date) {

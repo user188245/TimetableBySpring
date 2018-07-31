@@ -14,6 +14,6 @@ import com.user188245.timetable.model.dto.request.Request;
 public interface UpdatableService<RQ extends Request, T, K> {
 	
 	@Secured("ROLE_WRITE")
-	public void update(String username, @RequestBody RQ request) throws BadAccessException,NoSuchElementException,SQLException;
+	public K update(String username, @RequestBody RQ request) throws BadAccessException,NoSuchElementException,SQLException;
 
 }

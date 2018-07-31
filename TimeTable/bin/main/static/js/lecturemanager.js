@@ -140,9 +140,14 @@ function reportAdder(event) {
     }
     prepareLectureView();
     var send = new SendLecture(lecture);
-    doAjax("ajax/lecture",method,send,true,null,null);
+    doAjax("ajax/lecture",method,send,true,postAjax,null);
     popup.style.setProperty("display","none");
     mode = 0;
+}
+
+function postAjax(ajax){
+	alert("성공적으로 요청되었습니다.")
+	lectureList[lectureList.length-1].id = ajax.responseJSON.data;
 }
 
 function addTime(event) {

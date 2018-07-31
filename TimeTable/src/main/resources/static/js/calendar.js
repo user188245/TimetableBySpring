@@ -199,6 +199,11 @@ function removeSchedule(event) {
 
 function postSuccess(ajax) {
     alert("성공적으로 요청되었습니다.");
+    var id = ajax.responseJSON.data;
+    if(id !== undefined && id !== null){
+    	var scheduleListNow = scheduleList[currentDate.getDate()];
+    	scheduleListNow[scheduleListNow.length-1].id = id;
+    }
     makeCalendar(currentDate);
 }
 

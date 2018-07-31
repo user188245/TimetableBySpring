@@ -42,13 +42,13 @@ public class LectureService implements CreatableService<RequestLecture,Lecture, 
 	}
 
 	@Override
-	public void create(String username, RequestLecture request) throws BadAccessException, SQLException {
+	public Long create(String username, RequestLecture request) throws BadAccessException, SQLException {
 		usernameSetting(username, request.getLecture());
-		lectureRepository.save(username, request.getLecture());
+		return lectureRepository.save(username, request.getLecture()).getId();
 	}
 
 	@Override
-	public void update(String username, RequestLecture request) throws BadAccessException, NoSuchElementException, SQLException {
+	public Long update(String username, RequestLecture request) throws BadAccessException, NoSuchElementException, SQLException {
 		Lecture lec = request.getLecture();
 		Lecture lecOrigin = lectureRepository.findById(lec.getId()).get();
 		if(lec.getName() != null) {
@@ -64,7 +64,7 @@ public class LectureService implements CreatableService<RequestLecture,Lecture, 
 			lecOrigin.setScheduleList(lec.getScheduleList());
 		}
 		usernameSetting(username, request.getLecture());
-		lectureRepository.save(username, lecOrigin);
+		return lectureRepository.save(username, lecOrigin).getId();
 	}
 
 	@Override

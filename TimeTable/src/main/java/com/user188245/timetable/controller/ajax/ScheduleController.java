@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.user188245.timetable.model.core.ajax.service.ScheduleService;
 import com.user188245.timetable.model.core.exception.BadAccessException;
 import com.user188245.timetable.model.dto.request.RequestSchedule;
+import com.user188245.timetable.model.dto.response.DataResponse;
 import com.user188245.timetable.model.dto.response.Response;
 
 @RestController
@@ -65,16 +66,16 @@ public class ScheduleController extends ExceptionHandledCrudController<RequestSc
 	public ResponseEntity<? extends Response> create(@Valid @RequestBody RequestSchedule data, BindingResult bindingResult,
 			Principal principal) throws BadAccessException, SQLException {
 		// TODO Auto-generated method stub
-		scheduleService.create(principal.getName(), data);
-		return Response.buildOK();
+		Long id = scheduleService.create(principal.getName(), data);
+		return DataResponse.build(id);
 	}
 
 	@Override
 	@PostMapping("/update")
 	public ResponseEntity<? extends Response> update(@Valid @RequestBody RequestSchedule data, BindingResult bindingResult,
 			Principal principal) throws BadAccessException, NoSuchElementException, SQLException {
-		scheduleService.update(principal.getName(), data);
-		return Response.buildOK();
+		Long id = scheduleService.update(principal.getName(), data);
+		return DataResponse.build(id);
 	}
 	
 	

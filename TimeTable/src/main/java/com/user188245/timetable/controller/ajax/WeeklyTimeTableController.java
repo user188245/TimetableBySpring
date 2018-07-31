@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.user188245.timetable.model.core.ajax.service.WeeklyTimeTableService;
 import com.user188245.timetable.model.core.exception.BadAccessException;
 import com.user188245.timetable.model.dto.request.RequestWeeklyTimeTable;
+import com.user188245.timetable.model.dto.response.DataResponse;
 import com.user188245.timetable.model.dto.response.Response;
 
 @Controller
@@ -59,8 +60,8 @@ public class WeeklyTimeTableController extends ExceptionHandledCrudController<Re
 	public ResponseEntity<? extends Response> update(@Valid @RequestBody RequestWeeklyTimeTable data, BindingResult bindingResult,
 			Principal principal) throws BadAccessException, NoSuchElementException, SQLException {
 		// TODO Auto-generated method stub
-		weeklyTimeTableService.update(principal.getName(), data);
-		return Response.buildOK();
+		Long id = weeklyTimeTableService.update(principal.getName(), data);
+		return DataResponse.build(id);
 	}
 	
 	

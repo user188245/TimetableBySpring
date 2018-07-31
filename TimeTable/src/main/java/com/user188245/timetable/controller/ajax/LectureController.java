@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.user188245.timetable.model.core.ajax.service.LectureService;
 import com.user188245.timetable.model.core.exception.BadAccessException;
 import com.user188245.timetable.model.dto.request.RequestLecture;
+import com.user188245.timetable.model.dto.response.DataResponse;
 import com.user188245.timetable.model.dto.response.Response;
 
 @RestController
@@ -51,15 +52,15 @@ public class LectureController extends ExceptionHandledCrudController<RequestLec
 	public ResponseEntity<? extends Response> create(@Valid @RequestBody RequestLecture data, BindingResult bindingResult,
 			Principal principal) throws BadAccessException, SQLException {
 		// TODO Auto-generated method stub
-		lectureService.create(principal.getName(), data);
-		return Response.buildOK();
+		Long id = lectureService.create(principal.getName(), data);
+		return DataResponse.build(id);
 	}
 	@Override
 	@PostMapping("/update")
 	public ResponseEntity<? extends Response> update(@Valid @RequestBody RequestLecture data, BindingResult bindingResult,
 			Principal principal) throws BadAccessException, NoSuchElementException, SQLException {
-		lectureService.update(principal.getName(), data);
-		return Response.buildOK();
+		Long id = lectureService.update(principal.getName(), data);
+		return DataResponse.build(id);
 	}
 	
 	
