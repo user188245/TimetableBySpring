@@ -11,23 +11,20 @@ import org.springframework.stereotype.Service;
 import com.user188245.timetable.model.core.exception.BadAccessException;
 import com.user188245.timetable.model.dao.IrregularScheduleRepository;
 import com.user188245.timetable.model.dto.IrregularSchedule;
+import com.user188245.timetable.model.dto.Lecture;
 import com.user188245.timetable.model.dto.ScheduleTime;
+import com.user188245.timetable.model.dto.request.RequestLecture;
 import com.user188245.timetable.model.dto.request.RequestSchedule;
 import com.user188245.timetable.model.dto.response.DataResponse;
 
 @Service
-public class ScheduleService implements CrudService<RequestSchedule,IrregularSchedule,Long>{
+public class ScheduleService implements CreatableService<RequestSchedule,IrregularSchedule,Long>,
+										MultiReadableService<IrregularSchedule,LocalDate>,
+										UpdatableService<RequestSchedule,IrregularSchedule,Long>,
+										DeletableService<RequestSchedule,IrregularSchedule,Long>{
 
 	@Autowired
 	IrregularScheduleRepository irregularScheduleRepository;
-	
-	@Override
-	public ResponseEntity<DataResponse<IrregularSchedule>> read(String username, Long id)
-			throws BadAccessException, NoSuchElementException, SQLException {
-		// TODO Auto-generated method stub
-		IrregularSchedule irregularSchedule = irregularScheduleRepository.find(username, id);
-		return DataResponse.build(irregularSchedule);
-	}
 
 	@Override
 	public ResponseEntity<DataResponse<Iterable<IrregularSchedule>>> readAll(String username) throws SQLException {
@@ -36,7 +33,8 @@ public class ScheduleService implements CrudService<RequestSchedule,IrregularSch
 		return DataResponse.build(irregularSchedule);
 	}
 	
-	public ResponseEntity<DataResponse<Iterable<IrregularSchedule>>> readAllByDate(String username, LocalDate date) {
+	@Override
+	public ResponseEntity<DataResponse<Iterable<IrregularSchedule>>> read(String username, LocalDate date) {
 		Iterable<IrregularSchedule> irregularSchedule = irregularScheduleRepository.findAllByUsernameAndDate(username, date.withDayOfMonth(1), date.withDayOfMonth(date.lengthOfMonth()));
 		return DataResponse.build(irregularSchedule);
 	}

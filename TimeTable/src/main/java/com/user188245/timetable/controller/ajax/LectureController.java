@@ -32,16 +32,6 @@ public class LectureController extends ExceptionHandledCrudController<RequestLec
 
 	@Override
 	@GetMapping
-	public ResponseEntity<? extends Response> read(Principal principal, @RequestParam(value="id",required = false) Long id)
-			throws BadAccessException, NoSuchElementException, SQLException {
-		// TODO Auto-generated method stub
-		if(id == null)
-			return readAll(principal);
-		else
-			return lectureService.read(principal.getName(), id);
-	}
-
-	@Override
 	public ResponseEntity<? extends Response> readAll(Principal principal) throws SQLException {
 		// TODO Auto-generated method stub
 		return lectureService.readAll(principal.getName());

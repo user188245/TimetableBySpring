@@ -16,8 +16,6 @@ import com.user188245.timetable.model.dto.response.Response;
 
 public interface SecurityCrudController<T extends Request ,K> {
 	
-	public ResponseEntity<? extends Response> read(Principal principal, K key) throws BadAccessException, NoSuchElementException, SQLException;
-
 	public ResponseEntity<? extends Response> readAll(Principal principal) throws SQLException;
 	
 	public ResponseEntity<? extends Response> delete(Principal principal, K key) throws BadAccessException,NoSuchElementException,SQLException;

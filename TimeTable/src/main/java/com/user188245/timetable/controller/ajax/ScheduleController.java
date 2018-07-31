@@ -32,16 +32,6 @@ public class ScheduleController extends ExceptionHandledCrudController<RequestSc
 	ScheduleService scheduleService;
 
 	@Override
-	public ResponseEntity<? extends Response> read(Principal principal, @RequestParam(value="id",required = false) Long id)
-			throws BadAccessException, NoSuchElementException, SQLException {
-		// TODO Auto-generated method stub
-		if(id == null)
-			return readAll(principal);
-		else
-			return scheduleService.read(principal.getName(), id);
-	}
-
-	@Override
 	public ResponseEntity<? extends Response> readAll(Principal principal) throws SQLException {
 		// TODO Auto-generated method stub
 		return scheduleService.readAll(principal.getName());
@@ -55,13 +45,9 @@ public class ScheduleController extends ExceptionHandledCrudController<RequestSc
 			@RequestParam(value="date",required = false) String date) throws SQLException, BadAccessException, NoSuchElementException {
 
 		if(date == null) {
-			if(id == null) {
-				return readAll(principal);
-			}else {
-				return read(principal,id);
-			}
+			return readAll(principal);
 		}else	
-			return scheduleService.readAllByDate(principal.getName(), LocalDate.parse(date));
+			return scheduleService.read(principal.getName(), LocalDate.parse(date));
 	}
 
 	@Override
