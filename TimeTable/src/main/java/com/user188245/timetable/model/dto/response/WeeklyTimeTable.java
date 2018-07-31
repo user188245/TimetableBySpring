@@ -5,21 +5,21 @@ import com.user188245.timetable.model.dto.Lecture;
 
 public class WeeklyTimeTable {
 	
-	private final Lecture lecture;
+	private final Iterable<Lecture> lectureList;
 	
-	private final IrregularSchedule schedule;
+	private final Iterable<IrregularSchedule> exceptionalScheduleList;
 
-	public WeeklyTimeTable(Lecture lecture, IrregularSchedule schedule) {
-		this.lecture = lecture;
-		this.schedule = schedule;
+	public WeeklyTimeTable(Iterable<Lecture> lectureList, Iterable<IrregularSchedule> exceptionalScheduleList) {
+		this.lectureList = lectureList;
+		this.exceptionalScheduleList = exceptionalScheduleList;
 	}
 
-	public Lecture getLecture() {
-		return lecture;
+	public Iterable<Lecture> getLectureList() {
+		return lectureList;
 	}
 
-	public IrregularSchedule getSchedule() {
-		return schedule;
+	public Iterable<IrregularSchedule> getExceptionalScheduleList() {
+		return exceptionalScheduleList;
 	}
-	
+
 }

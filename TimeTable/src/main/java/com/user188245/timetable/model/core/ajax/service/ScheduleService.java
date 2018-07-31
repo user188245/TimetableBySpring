@@ -21,7 +21,7 @@ import com.user188245.timetable.model.dto.response.DataResponse;
 public class ScheduleService implements CreatableService<RequestSchedule,IrregularSchedule,Long>,
 										MultiReadableService<IrregularSchedule,LocalDate>,
 										UpdatableService<RequestSchedule,IrregularSchedule,Long>,
-										DeletableService<RequestSchedule,IrregularSchedule,Long>{
+										DeletableService<IrregularSchedule,Long>{
 
 	@Autowired
 	IrregularScheduleRepository irregularScheduleRepository;

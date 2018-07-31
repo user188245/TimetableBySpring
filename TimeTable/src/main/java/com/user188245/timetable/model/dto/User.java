@@ -48,6 +48,7 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer{
 	private String email;
 	
 	@Size(max=120)
+	@Column(length=1024)
 	private String description;
 	
 	@Transient

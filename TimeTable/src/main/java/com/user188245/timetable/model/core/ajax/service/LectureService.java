@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.user188245.timetable.model.core.exception.BadAccessException;
 import com.user188245.timetable.model.dao.LectureRepository;
 import com.user188245.timetable.model.dao.RegularScheduleRepository;
-import com.user188245.timetable.model.dto.IrregularSchedule;
 import com.user188245.timetable.model.dto.Lecture;
 import com.user188245.timetable.model.dto.RegularSchedule;
 import com.user188245.timetable.model.dto.request.RequestLecture;
@@ -22,7 +21,7 @@ import com.user188245.timetable.model.dto.response.DataResponse;
 public class LectureService implements CreatableService<RequestLecture,Lecture, Long>,
 										SingleReadableService<Lecture,Long>,
 										UpdatableService<RequestLecture,Lecture, Long>,
-										DeletableService<RequestLecture,Lecture, Long>{
+										DeletableService<Lecture, Long>{
 	
 	@Autowired
 	LectureRepository lectureRepository;

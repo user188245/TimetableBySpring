@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,6 +30,13 @@ public abstract class ExceptionHandledCrudController<T extends Request> implemen
 	}
 	
 	@ResponseBody
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<Response> accessDeniedExceptionExceptionHandler(AccessDeniedException e) {
+		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
+		return Response.buildInvalidResponseEntity(1005, "Access is denied. you don't have proper permissions.", null, HttpStatus.FORBIDDEN);
+	}
+	
+	@ResponseBody
 	@ExceptionHandler(SQLException.class)
 	public ResponseEntity<Response> sqlExceptionHandler(SQLException e) {
 		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
@@ -43,18 +51,9 @@ public abstract class ExceptionHandledCrudController<T extends Request> implemen
 	}
 	
 	@ResponseBody
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Response> exceptionHandler(Exception e) {
-		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
-		logger.error("check : ", e);
-		return Response.buildBadResponse(1000, "Unknown Error");
-	}
-	
-	@ResponseBody
 	@ExceptionHandler(InvalidDataAccessApiUsageException.class)
 	public ResponseEntity<Response> invalidDataAccessApiUsageExceptionHandler(InvalidDataAccessApiUsageException e) {
 		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
-		logger.error("check : ", e);
 		return Response.buildBadResponse(1050, "Check if there is missing parameters. See : " + e.getLocalizedMessage());
 	}
 	
@@ -62,8 +61,14 @@ public abstract class ExceptionHandledCrudController<T extends Request> implemen
 	@ExceptionHandler(DateTimeParseException.class)
 	public ResponseEntity<Response> dateTimeParseExceptionHandler(DateTimeParseException e) {
 		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
-		logger.error("check : ", e);
 		return Response.buildBadResponse(1008, "Wrong Date Format, must be (\"yyyy-MM-dd\"). See : " + e.getLocalizedMessage());
+	}
+	
+	@ResponseBody
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Response> exceptionHandler(Exception e) {
+		logger.error(e.getClass().getName() + " : " + e.getLocalizedMessage());
+		return Response.buildBadResponse(1000, "Unknown Error");
 	}
 	
 	

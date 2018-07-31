@@ -22,13 +22,6 @@ public class IrregularSchedule extends Schedule{
 	private LocalDate date;
 	
 	public IrregularSchedule() {super();}
-	
-//	public IrregularSchedule(String name, String location, ScheduleTime scheduleTime, String text, LocalDate date) {
-//		super(scheduleTime, location);
-//		this.name = name;
-//		this.text = text;
-//		this.date = date;
-//	}
 
 	public IrregularSchedule(String name, String location, ScheduleTime scheduleTime,String text, String date) {
 		super(scheduleTime, location);
@@ -60,10 +53,6 @@ public class IrregularSchedule extends Schedule{
 	public void setDate(String dateFormat) {
 		this.date = LocalDate.parse(dateFormat);
 	}
-	
-//	public void setDate(LocalDate date) {
-//		this.date = date;
-//	}
 	
 
 }

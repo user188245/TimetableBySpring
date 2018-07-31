@@ -28,11 +28,15 @@ public abstract class AbstractCrudTest{
 	
 	@Before
 	public void setUp() throws Exception {
-		objectMapper = new ObjectMapper();
 		mockMvc = MockMvcBuilders
 				.webAppContextSetup(context)
 				.addFilter(springSecurityFilterChain)
 				.build();
+		setObjectMapper();
+	}
+	
+	public void setObjectMapper() {
+		objectMapper = new ObjectMapper();
 	}
 
 	@Test
