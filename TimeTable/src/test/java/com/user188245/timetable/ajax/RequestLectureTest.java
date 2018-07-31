@@ -5,8 +5,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,7 +62,8 @@ public class RequestLectureTest extends AbstractCrudTest{
 		.andExpect(authenticated().withUsername(username))
 		.andExpect(jsonPath("$.errorCode").value(0))
 		.andExpect(jsonPath("$.data[0].id").isNotEmpty())
-		.andExpect(jsonPath("$.data[0].name").value("취침학개론"));
+		.andExpect(jsonPath("$.data[0].name").value("취침학개론"))
+		.andExpect(jsonPath("$.data[0].scheduleList[0].week").value("Monday"));
 	}
 
 	@Override
@@ -75,7 +76,7 @@ public class RequestLectureTest extends AbstractCrudTest{
 		RequestLecture lecture = new RequestLecture(l);
 		String json = toJson(lecture);
 		
-		getMockMvc().perform(patch(targetURI)
+		getMockMvc().perform(put(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
 				.contentType("application/json")

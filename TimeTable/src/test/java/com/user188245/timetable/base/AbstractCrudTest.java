@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -61,6 +62,26 @@ public abstract class AbstractCrudTest{
 	
 	public MockMvc getMockMvc() {
 		return mockMvc;
+	}
+	
+	protected static MockHttpServletRequestBuilder post(String targetURI) {
+		return org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post(targetURI + "/add");
+	}
+	
+	protected static MockHttpServletRequestBuilder get(String targetURI) {
+		return org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(targetURI + "/get");
+	}
+	
+	protected static MockHttpServletRequestBuilder put(String targetURI) {
+		return org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post(targetURI + "/update");
+	}
+	
+	protected static MockHttpServletRequestBuilder patch(String targetURI) {
+		return org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post(targetURI + "/update");
+	}
+	
+	protected static MockHttpServletRequestBuilder delete(String targetURI) {
+		return org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post(targetURI + "/remove");
 	}
 	
 	

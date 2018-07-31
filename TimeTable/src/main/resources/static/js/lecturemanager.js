@@ -131,16 +131,16 @@ function reportAdder(event) {
     var method = "N/A";
     if(mode === 1) {
         lectureList.push(lecture);
-        method = "post";
+        method = "add";
     }
     else if(mode === 2){
         lecture.id = targetID;
         lectureList[target] = lecture;
-        method = "patch";
+        method = "update";
     }
     prepareLectureView();
     var send = new SendLecture(lecture);
-    doAjax(method,send,true,null);
+    doAjax("ajax/lecture",method,send,true,null,null);
     popup.style.setProperty("display","none");
     mode = 0;
 }
@@ -167,7 +167,7 @@ function removeLecture(event) {
         var lecture = lectureList[index];
         lectureList.splice(index, 1);
         prepareLectureView();
-        doAjax("delete",{id: lecture.id},false,null);
+        doAjax("ajax/lecture","remove",{id: lecture.id},false,null,null);
     }
 }
 
@@ -202,23 +202,8 @@ function prepareTimeView(){
     }
 }
 
-function doAjax(method,data,isJson,ajaxSusccess) {
-    var csrf = $("csrf").getAttribute("content");
-    var csrf_header = $("csrf_header").getAttribute("content");
-    var param = (isJson)?JSON.stringify(data):data;
-    new Ajax.Request("/ajax/lecture", {
-        method: method,
-        requestHeaders: [csrf_header,csrf],
-        contentType:(isJson)?"application/json":"application/x-www-form-urlencoded",
-        parameters: param,
-        onSuccess: ajaxSusccess,
-        onFailure: ajaxFaulure,
-        onException: ajaxFaulure
-    });
-}
-
 function init(){
-    doAjax("get",null,false,initLectures);
+    doAjax("ajax/lecture","get",null,false,initLectures,null);
 }
 
 function ajaxFaulure(ajax, exception) {

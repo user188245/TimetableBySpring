@@ -173,16 +173,16 @@ function reportAdder(event) {
     var method = "N/A";
     if(mode === 1) {
         scheduleList[currentDate.getDate()].push(schedule);
-        method = "post";
+        method = 'add';
     }
     else if(mode === 2){
         schedule.id = targetID;
         scheduleList[currentDate.getDate()][target] = schedule;
-        method = "patch";
+        method = 'update';
     }
     prepareScheduleView();
     var send = new SendSchedule(schedule);
-    doAjax(method,send,true,postSuccess);
+    doAjax("ajax/calendar",method,send,true,postSuccess,null);
     popup.style.setProperty("display","none");
     makeCalendar(currentDate);
     mode = 0;
@@ -193,23 +193,8 @@ function removeSchedule(event) {
         var schedule = scheduleList[currentDate.getDate()][this.index];
         scheduleList[currentDate.getDate()].splice(this.index, 1);
         prepareScheduleView();
-        doAjax("delete",{id:schedule.id},false,postSuccess);
+        doAjax("ajax/calendar","remove",{id:schedule.id},false,postSuccess,null);
     }
-}
-
-function doAjax(method,data,isJson,ajaxSusccess) {
-    var csrf = $("csrf").getAttribute("content");
-    var csrf_header = $("csrf_header").getAttribute("content");
-    var param = (isJson)?JSON.stringify(data):data;
-    new Ajax.Request("/ajax/calendar", {
-        method: method,
-        requestHeaders: [csrf_header,csrf],
-        contentType:(isJson)?"application/json":"application/x-www-form-urlencoded",
-        parameters: param,
-        onSuccess: ajaxSusccess,
-        onFailure: ajaxFaulure,
-        onException: ajaxFaulure
-    });
 }
 
 function postSuccess(ajax) {
@@ -218,7 +203,7 @@ function postSuccess(ajax) {
 }
 
 function init(){
-    doAjax("get",{date:currentDate.toISOString()},false,initSchedules);
+    doAjax("ajax/calendar","get",{date:currentDate.toISOString()},false,initSchedules,null);
 }
 
 function ajaxFaulure(ajax, exception) {

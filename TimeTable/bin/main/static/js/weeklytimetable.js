@@ -96,14 +96,14 @@ WeeklyTimeTable.prototype = {
         }
         var xStart = topWidth;
         var yStart = headHeight+topHeight;
-        var lec;
+        var lec, sUnit, floatHour, targetY, targetHeight;
         for(i=0; i<this.lectureList.length; i++){
             lec = this.lectureList[i];
             for(j=0; j<lec.scheduleList.length; j++){
-                var sUnit = lec.scheduleList[j];
-                var floatHour = sUnit.scheduleTime.getFloatTime();
-                var targetY = yStart+yUnit*(sUnit.scheduleTime.getFloatStart() - this.startTime)*(60/this.interval);
-                var targetHeight = yUnit*sUnit.scheduleTime.getFloatTime()*(60/this.interval);
+                sUnit = lec.scheduleList[j];
+                floatHour = sUnit.scheduleTime.getFloatTime();
+                targetY = yStart+yUnit*(sUnit.scheduleTime.getFloatStart() - this.startTime)*(60/this.interval);
+                targetHeight = yUnit*sUnit.scheduleTime.getFloatTime()*(60/this.interval);
                 rect = this.createRect(xStart+xUnit*sUnit.week ,targetY,xUnit,targetHeight,"lecture");
                 rect.style.setProperty("fill",lec.separatingColor);
                 if(sUnit.isCanceled){
@@ -120,10 +120,10 @@ WeeklyTimeTable.prototype = {
             }
         }
         for(i=0; i<this.exceptionalList.length; i++){
-            var sUnit = this.exceptionalList[i];
-            var floatHour = sUnit.scheduleTime.getFloatTime();
-            var targetY = yStart+yUnit*(sUnit.scheduleTime.getFloatStart() - this.startTime)*(60/this.interval);
-            var targetHeight = yUnit*sUnit.scheduleTime.getFloatTime()*(60/this.interval);
+            sUnit = this.exceptionalList[i];
+            floatHour = sUnit.scheduleTime.getFloatTime();
+            targetY = yStart+yUnit*(sUnit.scheduleTime.getFloatStart() - this.startTime)*(60/this.interval);
+            targetHeight = yUnit*sUnit.scheduleTime.getFloatTime()*(60/this.interval);
             rect = this.createRect(xStart+xUnit*((sUnit.date.getDay() + 6) % 7) ,targetY,xUnit,targetHeight,"lecture");
             rect.style.setProperty("fill",sUnit.saperatingColor);
             rect.style.setProperty("opacity","0.95");
@@ -181,12 +181,7 @@ var rectOnClickRegularEvent = function(){
     $("lec_info_name").innerText = this.lecture.name;
     $("lec_info_instructor").innerText = this.lecture.instructor;
     $("lec_info_homepage").innerText = this.lecture.homepage;
-    if(this.schedule.isCanceled) {
-        $("lec_info_invalid").checked = true;
-    }
-    else{
-        $("lec_info_invalid").checked = false;
-    }
+    $("lec_info_invalid").checked = this.schedule.isCanceled;
     $("lec_info_period").innerText = this.schedule.scheduleTime;
     $("lec_info_location").innerText = this.schedule.location;
     selectedSchedule = this.schedule;
@@ -202,56 +197,14 @@ var rectOnClickIrregularEvent = function(){
     selectedSchedule = null;
 };
 
-
-function ajax_TimeTable(data){
-    uDate = new Date(data.date);
-
-    var csrftoken = "REMOVE_THIS";
-    var param = "csrfmiddlewaretoken=" + csrftoken + "&data=" + JSON.stringify(data);
-
-    // new Ajax.request("여기에 서버url을 넣는다.", {
-    //     method: "post",
-    //     parameters: param,
-    //     onSuccess: processTimeTable,
-    //     onFailure: ajaxFaulure,
-    //     onException: ajaxFaulure
-    // });
-
-    // 빌드 확인용 코드 시작.
-    alert(param);
-    processTimeTable();
-    // 빌드 확인용 코드 끝.
-}
-
-function SendIA(name,schedule,isInactive){
-    this.name = name;
-    this.schedule = schedule;
+function SendIA(id,isInactive){
+    this.id = id;
     this.isCanceled = isInactive;
-}
-
-function ajax_alterInactivation(data) {
-    var csrftoken = "REMOVE_THIS";
-    var param = "csrfmiddlewaretoken=" + csrftoken + "&data=" + JSON.stringify(data);
-    // new Ajax.request("여기에 서버url을 넣는다.", {
-    //     method: "post",
-    //     parameters: param,
-    //     onSuccess: alterInactivation,
-    //     onFailure: ajaxFaulure,
-    //     onException: ajaxFaulure
-    // });
-
-    alert(param);
-    alterInactivation();
 }
 
 function alterInactivation(ajax) {
     if(selectedSchedule !== undefined && selectedSchedule !== null){
-        if(selectedSchedule.isCanceled) {
-            selectedSchedule.isCanceled = false;
-        }
-        else {
-            selectedSchedule.isCanceled = true;
-        }
+        selectedSchedule.isCanceled = !selectedSchedule.isCanceled;
     }
     for(var i=0; i<uTimeTable.length; i++) {
         uTimeTable[i].refresh();
@@ -268,131 +221,35 @@ function ajaxFaulure(ajax, exception) {
 
 function processTimeTable(ajax){
     var weeklyTimeTables = $$("div.weeklyTimeTable");
-    for(var i=0; i<weeklyTimeTables.length; i++) {
+    var i, j;
+    for(i=0; i<weeklyTimeTables.length; i++) {
         try {
-            //var json = JSON.parse(ajax.responseText);
-            var json = JSON.parse(sampleJSON);
+            var json = ajax.responseJSON;
+            
             //var weeklyTimeTable = new WeeklyTimeTable(weeklyTimeTables[i], json.name, uDate);
             var weeklyTimeTable = uTimeTable[i];
             weeklyTimeTable.clear();
 
-            for(var i=0; i<json.lectureList.length; i++){
-                var jlec = json.lectureList[i];
+            for(i=0; i<json.data.lectureList.length; i++){
+                var jlec = json.data.lectureList[i];
                 var lec = new Lecture(jlec.name,jlec.instructor,jlec.homepage,createRandomColor(), null);
-                for(var j=0; j < jlec.scheduleList.length; j++){
+                for(j=0; j < jlec.scheduleList.length; j++){
                     var jsch = jlec.scheduleList[j];
                     var jt = jsch.scheduleTime;
                     lec.addRegularScheduleCustom(jt.startHour,jt.startMinute,jt.endHour,jt.endMinute,jsch.week,jsch.location,jsch.isCanceled,lec);
                 }
                 weeklyTimeTable.addLecture(lec);
             }
-            for(var j=0; j < json.exceptionalSchduleList.length; j++){
-                var jex = json.exceptionalSchduleList[j];
+            for(j=0; j < json.data.exceptionalScheduleList.length; j++){
+                var jex = json.data.exceptionalScheduleList[j];
                 weeklyTimeTable.exceptionalList.push(new IrregularSchedule(jex.name,jex.location,jex.text,jex.scheduleTime,jex.date,createRandomColor(),null));
             }
-            weeklyTimeTable.onCreate(json.name,9, 20, 60, uDate);
+            weeklyTimeTable.onCreate("Time Table",9, 20, 60, uDate);
         }catch(err){
             alert("error : " + err.message);
         }
-
     }
 }
-
-
-
-
-
-
-
-
-
-
-/*
-
-    테스트 빌드 코드
-
- */
-
-var sampleJSON = "{\n" +
-    "  \"name\": \"1학기 시간표\",\n" +
-    "  \"lectureList\": [\n" +
-    "    {\n" +
-    "      \"id\": \"2\",\n" +
-    "      \"name\": \"취침학개론\",\n" +
-    "      \"instructor\": \"최드르렁\",\n" +
-    "      \"homepage\":\"http://www.durrung.hanyang.ac.kr/lec/sleep2040.html\",\n" +
-    "      \"scheduleList\": [\n" +
-    "        {\n" +
-    "      \"scheduleTime\": {\n" +
-    "          \"startHour\": 10,\n" +
-    "          \"startMinute\": 0,\n" +
-    "          \"endHour\": 11,\n" +
-    "          \"endMinute\": 30\n" +
-    "      },\n" +
-    "          \"week\": 0,\n" +
-    "          \"location\": \"제1 취침관 201호\",\n" +
-    "          \"isCanceled\": true\n" +
-    "        },\n" +
-    "        {\n" +
-    "      \"scheduleTime\": {\n" +
-    "          \"startHour\": 10,\n" +
-    "          \"startMinute\": 0,\n" +
-    "          \"endHour\": 12,\n" +
-    "          \"endMinute\": 30\n" +
-    "      },\n" +
-    "          \"week\": 2,\n" +
-    "          \"location\": \"제3 숙면관 403호\",\n" +
-    "          \"isCanceled\": false\n" +
-    "        }\n" +
-    "      ]\n" +
-    "    },\n" +
-    "    {\n" +
-    "      \"id\": \"3\",\n" +
-    "      \"name\": \"대학수면학특론\",\n" +
-    "      \"instructor\": \"쿨쿨자\",\n" +
-    "      \"homepage\":\"http://www.zrg.hanyang.ac.kr/class/slp4044/2017\",\n" +
-    "      \"scheduleList\": [\n" +
-    "        {\n" +
-    "      \"scheduleTime\": {\n" +
-    "          \"startHour\": 13,\n" +
-    "          \"startMinute\": 0,\n" +
-    "          \"endHour\": 16,\n" +
-    "          \"endMinute\": 0\n" +
-    "      },\n" +
-    "          \"week\": 0,\n" +
-    "          \"location\": \"컨퍼런슬립홀 중강당\",\n" +
-    "          \"isCanceled\": false\n" +
-    "        },\n" +
-    "        {\n" +
-    "      \"scheduleTime\": {\n" +
-    "          \"startHour\": 9,\n" +
-    "          \"startMinute\": 0,\n" +
-    "          \"endHour\": 10,\n" +
-    "          \"endMinute\": 30\n" +
-    "      },\n" +
-    "          \"week\": 3,\n" +
-    "          \"location\": \"제1 숙면관 203호\",\n" +
-    "          \"isCanceled\": false\n" +
-    "        }\n" +
-    "      ]\n" +
-    "    }\n" +
-    "  ],\n" +
-    "  \"exceptionalSchduleList\": [\n" +
-    "    {\n" +
-    "      \"id\": \"100\",\n" +
-    "      \"name\": \"현대꿈해석학 초청강사특강\",\n" +
-    "      \"location\": \"컨퍼런슬립홀 중강당\",\n" +
-    "      \"text\": \"특별 초청 강의, 다 듣고 마지막에 상품권 추첨하는거 잊지 않기\",\n" +
-    "    \"scheduleTime\": {\n" +
-    "      \"startHour\": 13,\n" +
-    "      \"startMinute\": 0,\n" +
-    "      \"endHour\": 15,\n" +
-    "      \"endMinute\": 0\n" +
-    "    },\n" +
-    "      \"date\": \"2017-12-15\"\n" +
-    "    }\n" +
-    "  ]\n" +
-    "}";
 
 function createRandomColor(){
     var h = Math.floor(Math.random()*360);
@@ -400,30 +257,30 @@ function createRandomColor(){
     return "hsl(" + h + ",100%," + l + "%)";
 }
 
-
 function datepicker_event(event) {
     var d = this.valueAsDate;
-    ajax_TimeTable(new SendDate(d.toISOString()));
+    uDate = d;
+    doAjax("ajax/timetable","get",{date:d.toISOString()}, false, processTimeTable,null);
 }
 
 function info_hide_event(event) {
     this.parentElement.parentElement.style.setProperty("display","none");
     var inactive = $("lec_info_invalid").checked;
+    var data = new SendIA(selectedSchedule.lecture.id, selectedSchedule.isCanceled);
     if(selectedSchedule instanceof RegularSchedule && inactive !== selectedSchedule.isCanceled){
-        ajax_alterInactivation(new SendIA(selectedSchedule.lecture.name, selectedSchedule, selectedSchedule.isCanceled));
+        doAjax("ajax/timetable","update",data,true,alterInactivation,null);
     }
 }
 
 document.observe('dom:loaded', function() {
     var d = new Date();
-    var senddate = new SendDate(d.toISOString());
 
     var weeklyTimeTables = $$("div.weeklyTimeTable");
     for(var i=0; i<weeklyTimeTables.length; i++) {
         uTimeTable[i] = new WeeklyTimeTable(weeklyTimeTables[i]);
     }
 
-    ajax_TimeTable(senddate);
+    doAjax("ajax/timetable","get",{date:d.toISOString()}, false, processTimeTable,null);
     // date-picker를 세팅함
     var date_picker = $("datepicker");
     date_picker.observe("change",datepicker_event);
@@ -431,22 +288,16 @@ document.observe('dom:loaded', function() {
     // footer파트의 info 설정
     $("lec_info_hide").observe("click",info_hide_event);
     $("plan_info_hide").observe("click",info_hide_event);
-
     onsize();
-
-    //alert($("article").style.getPropertyValue("width"));
 });
 
 var onsize = function(event) {
     var weeklyTimeTables = $$("div.weeklyTimeTable");
+    var article = $("article");
     for(var i=0; i<weeklyTimeTables.length; i++) {
-        weeklyTimeTables[i].setAttribute("width",$("article").offsetWidth);
-        uTimeTable[i].resize($("article").offsetWidth,1200);
+        weeklyTimeTables[i].setAttribute("width",article.offsetWidth);
+        uTimeTable[i].resize(article.offsetWidth,1200);
     }
 };
 
 window.onresize = onsize;
-
-
-
-

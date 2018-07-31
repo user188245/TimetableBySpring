@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <%@ include file="csrf.jsp" %>
-    <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js" type="text/javascript"></script>
+    <%@ include file="commonscript.jsp" %>
     <script src="js/scheduleform.js" type="text/javascript" charset="UTF-8"></script>
     <script src="js/lecturemanager.js" type="text/javascript" charset="UTF-8"></script>
     <link rel="stylesheet" type="text/css" href="/styles/lecture.css" />

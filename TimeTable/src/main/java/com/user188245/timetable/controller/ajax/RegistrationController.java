@@ -14,8 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.user188245.timetable.controller.MainController;
@@ -29,6 +31,7 @@ import com.user188245.timetable.model.dto.request.RequestUser;
 import com.user188245.timetable.model.dto.response.Response;
 
 @Controller
+@RequestMapping("/signup")
 public class RegistrationController {
 	
 	@Autowired
@@ -36,7 +39,7 @@ public class RegistrationController {
 	
 	private final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 	
-	@PostMapping(value="/signup")
+	@PostMapping("/add")
 	@ResponseBody
 	public ResponseEntity<? extends Response> requestSignup(
 			@Valid @RequestBody RequestUser data, 

@@ -12,7 +12,7 @@
 	<title>Timetable</title>
 	<link rel="stylesheet" type="text/css" href="/styles/login.css">
 	<%@ include file="csrf.jsp" %>
-	<script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js" type="text/javascript"></script>
+	<%@ include file="commonscript.jsp" %>
 	<script src="/js/signup.js" type="text/javascript" charset="UTF-8"></script>
 	
 </head>

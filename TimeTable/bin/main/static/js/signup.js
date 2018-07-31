@@ -8,24 +8,6 @@ function RegistrationForm(username, password, passwordValidation, email, descrip
     this.description = description;
 }
 
-
-
-function postData(data) {
-    var csrf = $("csrf").getAttribute("content");
-    var csrf_header = $("csrf_header").getAttribute("content");
-    var param = JSON.stringify(data);
-    new Ajax.Request("/signup", {
-        method: "post",
-        requestHeaders: [csrf_header,csrf],
-        contentType:"application/json",
-        parameters: param,
-        onSuccess: ajaxSusccess,
-        onFailure: ajaxFaulure,
-        onException: ajaxFaulure,
-        onComplete: redirect
-    });
-}
-
 function ajaxSusccess(response) {
     alert("성공적으로 생성되었습니다.");
 }
@@ -40,7 +22,7 @@ function ajaxFaulure(response) {
 
 function redirect(response){
     var redirectUrl = response.responseJSON.redirect;
-    if(redirectUrl != null && !redirectUrl){
+    if(redirectUrl !== undefined && redirectUrl !== null){
         window.location.href = redirectUrl;
     }
 }
@@ -52,7 +34,7 @@ function doRegistration() {
     var email = $("email").getValue();
     var description = $("description").getValue();
     var data = new RegistrationForm(username,password,passwordValidation,email,description);
-    postData(data);
+    doAjax("/signup","add",data,true,ajaxSusccess,redirect);
 }
 
 document.observe('dom:loaded', function() {

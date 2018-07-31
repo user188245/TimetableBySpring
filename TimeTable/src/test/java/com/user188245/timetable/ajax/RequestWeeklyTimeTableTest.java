@@ -1,11 +1,8 @@
 package com.user188245.timetable.ajax;
 
-import static org.junit.Assert.fail;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,7 +60,8 @@ public class RequestWeeklyTimeTableTest extends AbstractCrudTest{
 	@Override
 	public void readTest() throws Exception {
 		// TODO Auto-generated method stub
-		getMockMvc().perform(get(targetURI)
+		getMockMvc().perform(
+				get(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
 				.param("date", time)
@@ -85,7 +83,8 @@ public class RequestWeeklyTimeTableTest extends AbstractCrudTest{
 		RequestWeeklyTimeTable requestWeeklyTimeTable = new RequestWeeklyTimeTable(id,false);
 		String json = toJson(requestWeeklyTimeTable);
 		
-		getMockMvc().perform(patch(targetURI)
+		getMockMvc().perform(
+				put(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
 				.contentType("application/json")

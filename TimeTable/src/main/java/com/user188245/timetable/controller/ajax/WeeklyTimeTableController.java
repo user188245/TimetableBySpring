@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +36,7 @@ public class WeeklyTimeTableController extends ExceptionHandledCrudController<Re
 		return null;
 	}
 	
-	@GetMapping
+	@GetMapping("/get")
 	public ResponseEntity<? extends Response> read(Principal principal, @RequestParam String date) throws SQLException, BadAccessException, NoSuchElementException {
 		// TODO Auto-generated method stub
 		return weeklyTimeTableService.read(principal.getName(), LocalDate.parse(date));
@@ -53,7 +55,7 @@ public class WeeklyTimeTableController extends ExceptionHandledCrudController<Re
 	}
 
 	@Override
-	@PatchMapping
+	@PostMapping("/update")
 	public ResponseEntity<? extends Response> update(@Valid @RequestBody RequestWeeklyTimeTable data, BindingResult bindingResult,
 			Principal principal) throws BadAccessException, NoSuchElementException, SQLException {
 		// TODO Auto-generated method stub

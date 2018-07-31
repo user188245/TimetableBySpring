@@ -10,9 +10,7 @@
 	<%@ include file="csrf.jsp" %>
 	<link rel="stylesheet" type="text/css" href="styles/index.css" />
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js" type="text/javascript"></script>
-	<script src="http://d3plus.org/js/d3.js" type="text/javascript"></script>
-	<script src="http://d3plus.org/js/d3plus.js" type="text/javascript"></script>
+	<%@ include file="commonscript.jsp" %>
 	<title>Timetable</title>
 </head>
 <body>

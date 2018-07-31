@@ -8,7 +8,7 @@
 	<meta charset="UTF-8">
 	<title>Timetable</title>
 	<%@ include file="csrf.jsp" %>
-	<script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js" type="text/javascript"></script>
+	<%@ include file="commonscript.jsp" %>
 	<link rel="stylesheet" type="text/css" href="styles/calender.css">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<script src="/js/scheduleform.js" type="text/javascript" charset="UTF-8"></script>

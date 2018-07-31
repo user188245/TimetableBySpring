@@ -4,13 +4,13 @@ package com.user188245.timetable.ajax;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -30,13 +30,14 @@ public class RequestUserTest extends AbstractStandaloneTest<RegistrationControll
 		
 		String userJson = toJson(user);
 		
-		getMockMvc().perform(post("/signup")
+		getMockMvc().perform(post("/signup/add")
 				.with(csrf().asHeader())
 				.contentType("application/json")
 				.content(userJson)
 			)
 			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("No Error")));
+			.andExpect(content().string(containsString("No Error")))
+			.andDo(print());
 	}
 	
 	@Test
@@ -44,7 +45,7 @@ public class RequestUserTest extends AbstractStandaloneTest<RegistrationControll
 		RequestUser user = new RequestUser("max7723","123456789","123456123456789","max@def.com","Hello World!");
 		String userJson = toJson(user);
 		
-		getMockMvc().perform(post("/signup")
+		getMockMvc().perform(post("/signup/add")
 				.with(csrf().asHeader())
 				.content(userJson)
 				.contentType("application/json")
@@ -58,7 +59,7 @@ public class RequestUserTest extends AbstractStandaloneTest<RegistrationControll
 		RequestUser user = new RequestUser("simon","123456789","123456789","malformed email","Hello World!");
 		String userJson = toJson(user);
 		
-		getMockMvc().perform(post("/signup")
+		getMockMvc().perform(post("/signup/add")
 				.with(csrf().asHeader())
 				.content(userJson)
 				.contentType("application/json")
@@ -72,7 +73,7 @@ public class RequestUserTest extends AbstractStandaloneTest<RegistrationControll
 		RequestUser user = new RequestUser("paul","123456789","123456789","paul@def.com","hello");
 		String userJson = toJson(user);
 		
-		getMockMvc().perform(post("/signup")
+		getMockMvc().perform(post("/signup/add")
 				.with(csrf().asHeader())
 				.content(userJson)
 				.contentType("application/json")
@@ -83,7 +84,7 @@ public class RequestUserTest extends AbstractStandaloneTest<RegistrationControll
 		user = new RequestUser("paul","abcdabcd","abcdabcd","qwerty@email.com","It's Paul!");
 		userJson = toJson(user);
 		
-		getMockMvc().perform(post("/signup")
+		getMockMvc().perform(post("/signup/add")
 				.with(csrf().asHeader())
 				.content(userJson)
 				.contentType("application/json")
