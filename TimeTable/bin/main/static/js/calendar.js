@@ -49,15 +49,11 @@ function moveCalendar(e) {
 function prevCalendar(e) {
     currentDate.setMonth(currentDate.getMonth()-1);
     init();
-    makeCalendar(currentDate);
-    prepareScheduleView();
 }
 
 function nextCalendar(e) {
     currentDate.setMonth(currentDate.getMonth()+1);
     init();
-    makeCalendar(currentDate);
-    prepareScheduleView();
 }
 
 function makeCalendar(date) {
@@ -228,6 +224,8 @@ function initSchedules(ajax) {
         var schedule = buildInstance(s, IrregularSchedule);
         scheduleList[schedule.date.getDate()].push(schedule);
     }
+    makeCalendar(currentDate);
+    prepareScheduleView();
 }
 
 document.observe('dom:loaded', function() {
@@ -244,7 +242,6 @@ document.observe('dom:loaded', function() {
     $("s_add_cancel").observe("click",closeAdder);
     $("s_add_ok").observe("click",reportAdder);
     init();
-    makeCalendar(currentDate);
 });
 
 

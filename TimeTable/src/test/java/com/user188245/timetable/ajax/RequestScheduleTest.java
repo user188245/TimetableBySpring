@@ -62,6 +62,7 @@ public class RequestScheduleTest extends AbstractCrudTest{
 		.andExpect(jsonPath("$.data[0].id").exists())
 		.andExpect(jsonPath("$.data[0].id").isNumber())
 		.andExpect(jsonPath("$.data[0].location").value("장소"))
+		.andExpect(jsonPath("$.data[0].date").value(time0))
 		.andDo(print());
 	}
 

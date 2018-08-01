@@ -27,7 +27,7 @@ public class IrregularSchedule extends Schedule{
 		super(scheduleTime, location);
 		this.name = name;
 		this.text = text;
-		this.date = LocalDate.parse(date);
+		setDate(date);
 	}
 
 	public String getName() {

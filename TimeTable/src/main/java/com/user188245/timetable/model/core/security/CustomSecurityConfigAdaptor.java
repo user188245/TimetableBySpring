@@ -20,6 +20,7 @@ public class CustomSecurityConfigAdaptor extends WebSecurityConfigurerAdapter{
 		.authorizeRequests()
 			//permit All person regardless authority.
 			.antMatchers("/js/**", "/styles/**", "/login", "/signup", "/favicon.png").permitAll()
+			.antMatchers("/login/**", "/signup/**").permitAll()
 			//permit USER regardless authority
 			.anyRequest().hasAuthority("ROLE_READ")
 			.and()

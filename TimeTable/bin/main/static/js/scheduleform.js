@@ -12,9 +12,9 @@ var Month= ["January","February","March","April","May","June","July","August","S
     }
 
     Date.prototype.toISOString = function() {
-        return this.getUTCFullYear() +
-            '-' + pad(this.getUTCMonth() + 1) +
-            '-' + pad(this.getUTCDate());
+        return this.getFullYear() +
+            '-' + pad(this.getMonth() + 1) +
+            '-' + pad(this.getDate());
     };
 
 }());
