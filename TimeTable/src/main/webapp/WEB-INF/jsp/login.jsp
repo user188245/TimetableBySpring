@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <sec:authorize access="isAuthenticated()">
 	<c:redirect url="/"/>
 </sec:authorize>
@@ -37,8 +38,7 @@
 		</div>
 	</form>
 	<a href="/signup"><input type="submit" name="submit" value="Signup" /></a>
-	<%-- 
-	<a href="/social"><button class="btn btn-danger">
+	<a href="/oauth2/authorization/google"><button class="btn btn-danger">
 		<svg class="social-icons social-icons__google social-icons--enabled" width="20" height="20" viewBox="0 0 20     20" xmlns="http://www.w3.org/2000/svg">
 			<g fill="none" fill-rule="evenodd">
 				<path d="M19.6 10.227c0-.709-.064-1.39-.182-2.045H10v3.868h5.382a4.6 4.6 0 0 1-1.996     3.018v2.51h3.232c1.891-1.742 2.982-4.305 2.982-7.35z" fill="#4285F4"></path>
@@ -49,7 +49,7 @@
 		</svg>
 		<span class="social-buttons__service-name">Google 계정으로 로그인</span>
 	</button></a>
-	--%>
+
 	
 </div>
 

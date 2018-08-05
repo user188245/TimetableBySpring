@@ -48,6 +48,11 @@ dependencies {
 	//JSTL
 	compile('javax.servlet:jstl')
 	compile('org.springframework.security:spring-security-taglibs')
+	//OAuth2
+	compile('org.springframework.security:spring-security-oauth2-client')
+	compile('org.springframework.security:spring-security-oauth2-jose')
+	//json
+	compile('net.minidev:json-smart:2.3')
 	//etc
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('mysql:mysql-connector-java')

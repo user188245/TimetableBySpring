@@ -5,5 +5,5 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface TimeTableRepository<T, K> extends CrudRepository<T, K>{
-
+	
 }

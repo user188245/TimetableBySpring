@@ -1,6 +1,8 @@
 package com.user188245.timetable.model.dto;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -19,6 +21,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.validation.annotation.Validated;
 
 import com.user188245.timetable.model.core.util.AuthorityBitEncoder;
@@ -26,7 +29,7 @@ import com.user188245.timetable.model.core.util.AuthorityBitEncoder;
 @Entity
 @Validated
 @Table(indexes= {@Index(columnList = "username"),@Index(columnList = "email")})
-public class User extends BasicDTO implements UserDetails, CredentialsContainer{
+public class User extends BasicDTO implements UserDetails, CredentialsContainer, OAuth2User{
 	
 	/**
 	 * 
@@ -168,6 +171,21 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer{
 		passwordEncoderLoad();
 		bitEncoderLoad();
 		return new User(username,password,email,description,Authority.generateDefaultAuthoritySet());
+	}
+
+	@Override
+	public String getName() {
+		return username;
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		// TODO Auto-generated method stub
+		Map<String,Object> attr = new HashMap<String,Object>(3);
+		attr.put("name", username);
+		attr.put("email", email);
+		attr.put("description", description);
+		return attr;
 	}
 
 }
