@@ -19,7 +19,7 @@
 <div>
 <c:if test="${param.error != null}">
 	<p>
-		id or password was invalid.
+		<c:out value="login failed!"/>
 	</p>
 </c:if>
 <c:if test="${param.logout != null}">

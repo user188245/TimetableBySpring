@@ -7,7 +7,7 @@
 <header class="w3-right">
 	<span>
 		<sec:authorize access="isAuthenticated()">
-			<sec:authentication property="principal"/>님 환영합니다</span>
+			<sec:authentication property="principal.name"/>님 환영합니다</span>
 			<sec:authorize access="hasAuthority('SUPER')">[슈퍼유저]</sec:authorize>
 			<button class="w3-btn w3-round-xxlarge w3-black" id="logout">LOGOUT</button>
 		</sec:authorize>

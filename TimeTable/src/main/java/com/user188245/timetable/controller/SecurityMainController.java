@@ -19,12 +19,21 @@ public class SecurityMainController {
 	@Autowired
 	OAuth2AuthorizedClientService authorizedClientService;
 	
-	@GetMapping(value = "/")
-    public String root(Principal principal) {
+	@GetMapping(value = "/index")
+    public String index(Principal principal, Model model) {
 		if(principal instanceof OAuth2AuthenticationToken) {
-			OAuth2User principal2 = ((OAuth2AuthenticationToken)principal).getPrincipal();
+			OAuth2AuthenticationToken token = (OAuth2AuthenticationToken)principal;
+			if(token.getPrincipal() instanceof User) {
+				User user = (User)token.getPrincipal();
+				if(user.checkRegistrationRequired()) {
+					model.addAttribute("name", user.getEmail());
+					return "oauth_registration";
+				}
+			}
+			else
+				return "index";
 		}
-        return "redirect:/index";
+		return "index";
     }
 
 	@GetMapping(value = "/login")
@@ -43,6 +52,15 @@ public class SecurityMainController {
 		model.addAttribute("email", Constant.EMAIL);
 		model.addAttribute("description",Constant.DESCRIPTION);
         return "signup";
+    }
+	
+	@GetMapping(value ="/signup/social")
+	public String socialSignup(Principal principal) {
+		if(principal instanceof OAuth2AuthenticationToken) {
+			System.out.println("good");
+		}else
+			System.out.println("bad");
+        return "/";
     }
 
 }

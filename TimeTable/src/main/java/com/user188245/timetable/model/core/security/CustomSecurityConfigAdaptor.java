@@ -22,7 +22,6 @@ public class CustomSecurityConfigAdaptor extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private CustomOAuth2UserService oAuth2UserService;
-	
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -50,9 +49,9 @@ public class CustomSecurityConfigAdaptor extends WebSecurityConfigurerAdapter{
 		.oauth2Login()
 			.loginPage("/login")
 			.userInfoEndpoint()
+				.oidcUserService(oAuth2UserService)
 				.customUserType(User.class, "google")
-				.userService(oAuth2UserService)
-				.userAuthoritiesMapper(userAuthoritiesMapper())
+				//.userAuthoritiesMapper(userAuthoritiesMapper())
 				.and()
 		.and()
 		//if 
@@ -80,6 +79,5 @@ public class CustomSecurityConfigAdaptor extends WebSecurityConfigurerAdapter{
 			}
 		};
 	}
-
 	
 }

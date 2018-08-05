@@ -21,6 +21,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,7 +32,7 @@ import com.user188245.timetable.model.core.util.AuthorityBitEncoder;
 @Entity
 @Validated
 @Table(indexes= {@Index(columnList = "username"),@Index(columnList = "email")})
-public class User extends BasicDTO implements UserDetails, CredentialsContainer, OAuth2User{
+public class User extends BasicDTO implements UserDetails, CredentialsContainer, OAuth2User, OidcUser{
 	
 	/**
 	 * 
@@ -40,13 +43,11 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer,
 	@NotBlank
 	private String username;
 	
-	@Column(nullable = false)
-	@NotBlank
 	@NotNull
 	@Size(min=8)
 	private String password;
 	
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	@Email
 	private String email;
 	
@@ -63,6 +64,12 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer,
 	
 	@Transient
 	private Set<? extends GrantedAuthority> authorities;
+	
+	@Transient
+	private OidcIdToken idToken;
+	
+	@Transient
+	private OidcUserInfo userInfo;
 	
 	@Column(nullable = false)
 	private long authorityFlag;
@@ -96,6 +103,10 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer,
 		return authorities;
 	}
 	
+	public User setAuthorityFlag(int authorityFlag) {
+		this.authorityFlag = authorityFlag;
+		return this;
+	}
 
 	public void setAuthorities(Set<Authority> authorities) {
 		this.authorities = authorities;
@@ -113,11 +124,15 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer,
 		// TODO Auto-generated method stub
 		return password;
 	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return username;
+		return getName();
 	}
 	
 	public String getEmail() {
@@ -172,10 +187,16 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer,
 		bitEncoderLoad();
 		return new User(username,password,email,description,Authority.generateDefaultAuthoritySet());
 	}
-
+	
+	public static User buildDummy() {
+		return new User();
+	}
 	@Override
 	public String getName() {
-		return username;
+		if(username != null)
+			return username;
+		else
+			return "N/A";
 	}
 
 	@Override
@@ -186,6 +207,39 @@ public class User extends BasicDTO implements UserDetails, CredentialsContainer,
 		attr.put("email", email);
 		attr.put("description", description);
 		return attr;
+	}
+
+	@Override
+	public Map<String, Object> getClaims() {
+		return this.userInfo.getClaims();
+	}
+
+	@Override
+	public OidcUserInfo getUserInfo() {
+		return this.userInfo;
+	}
+
+	@Override
+	public OidcIdToken getIdToken() {
+		return this.idToken;
+	}
+	
+	public void setToken(OidcIdToken token) {
+		if(token.getEmailVerified())
+			this.email = token.getEmail();
+		this.idToken = token;
+	}
+	
+	public void generateUserInfo() {
+		this.userInfo = new OidcUserInfo(getAttributes());
+	}
+	
+	public boolean checkRegistrationRequired() {
+		return this.idToken != null && this.username == null;
+	}
+	
+	public void generatePassword() {
+		this.password = "\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1";
 	}
 
 }
