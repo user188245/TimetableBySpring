@@ -2,12 +2,14 @@ package com.user188245.timetable.base;
 
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@TestPropertySource("classpath:test.properties")
 public class AbstractStandaloneTest<C> {
 	
 	private MockMvc mockMvc;

@@ -4,6 +4,7 @@ package com.user188245.timetable.ajax;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -32,7 +33,7 @@ public class RequestUserTest extends AbstractStandaloneTest<RegistrationControll
 		
 		getMockMvc().perform(post("/signup/add")
 				.with(csrf().asHeader())
-				.contentType("application/json")
+				.contentType(MediaType.APPLICATION_JSON)
 				.content(userJson)
 			)
 			.andExpect(status().isOk())
@@ -48,7 +49,7 @@ public class RequestUserTest extends AbstractStandaloneTest<RegistrationControll
 		getMockMvc().perform(post("/signup/add")
 				.with(csrf().asHeader())
 				.content(userJson)
-				.contentType("application/json")
+				.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andExpect(status().is4xxClientError())
 			.andExpect(jsonPath("$.errorCode").value(1001));
@@ -62,7 +63,7 @@ public class RequestUserTest extends AbstractStandaloneTest<RegistrationControll
 		getMockMvc().perform(post("/signup/add")
 				.with(csrf().asHeader())
 				.content(userJson)
-				.contentType("application/json")
+				.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andExpect(status().is4xxClientError())
 			.andExpect(jsonPath("$.errorCode").value(1002));
@@ -76,7 +77,7 @@ public class RequestUserTest extends AbstractStandaloneTest<RegistrationControll
 		getMockMvc().perform(post("/signup/add")
 				.with(csrf().asHeader())
 				.content(userJson)
-				.contentType("application/json")
+				.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.errorCode").value(0));

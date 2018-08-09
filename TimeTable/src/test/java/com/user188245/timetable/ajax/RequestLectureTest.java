@@ -11,9 +11,11 @@ import java.util.List;
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.jayway.jsonpath.JsonPath;
 import com.user188245.timetable.base.AbstractCrudTest;
 import com.user188245.timetable.model.dto.Lecture;
 import com.user188245.timetable.model.dto.RegularSchedule;
@@ -40,7 +42,7 @@ public class RequestLectureTest extends AbstractCrudTest{
 		getMockMvc().perform(post(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
-				.contentType("application/json")
+				.contentType(MediaType.APPLICATION_JSON)
 				.content(json)
 		)
 		.andExpect(authenticated().withUsername(username))
@@ -59,7 +61,11 @@ public class RequestLectureTest extends AbstractCrudTest{
 		.andExpect(jsonPath("$.errorCode").value(0))
 		.andExpect(jsonPath("$.data[0].id").isNotEmpty())
 		.andExpect(jsonPath("$.data[0].name").value("취침학개론"))
-		.andExpect(jsonPath("$.data[0].scheduleList[0].week").value("Monday"));
+		.andExpect(jsonPath("$.data[0].scheduleList").exists())
+		.andDo(result->{
+			String response = result.getResponse().getContentAsString();
+			id = Long.parseLong(JsonPath.parse(response).read("$.data[0].id").toString());
+		});
 	}
 
 	@Override
@@ -88,7 +94,7 @@ public class RequestLectureTest extends AbstractCrudTest{
 		getMockMvc().perform(delete(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
-				.param("id", "1")
+				.param("id", String.valueOf(id))
 		)
 		.andExpect(status().isOk())
 		.andExpect(authenticated().withUsername(username))

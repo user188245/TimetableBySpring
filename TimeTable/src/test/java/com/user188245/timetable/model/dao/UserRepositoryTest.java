@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.user188245.timetable.model.dao.UserRepository;
@@ -16,6 +17,7 @@ import com.user188245.timetable.model.dto.User;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@TestPropertySource("classpath:test.properties")
 public class UserRepositoryTest {
 
 	@Autowired
@@ -34,7 +36,7 @@ public class UserRepositoryTest {
 		assertNotNull(real);
 		assertEquals("superman", real.getUsername());
 		assertEquals("abc@def.com", real.getEmail());
-		assertFalse(real.getAuthorities().isEmpty());
+		assertFalse(real.flagPatchToSet().getAuthorities().isEmpty());
 		
 		
 		//Deletion

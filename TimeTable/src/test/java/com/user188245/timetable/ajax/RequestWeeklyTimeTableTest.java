@@ -13,9 +13,11 @@ import java.util.List;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.jayway.jsonpath.JsonPath;
 import com.user188245.timetable.base.AbstractCrudTest;
 import com.user188245.timetable.model.dao.IrregularScheduleRepository;
 import com.user188245.timetable.model.dao.LectureRepository;
@@ -40,6 +42,8 @@ public class RequestWeeklyTimeTableTest extends AbstractCrudTest{
 	IrregularScheduleRepository dao2;
 	
 	private long id = 1;
+	private long irrId = 2;
+	private long rId = 3;
 	
 	private static final String time = "2020-12-03";
 
@@ -73,21 +77,27 @@ public class RequestWeeklyTimeTableTest extends AbstractCrudTest{
 		.andExpect(jsonPath("$.data.lectureList").isNotEmpty())
 		.andExpect(jsonPath("$.data.lectureList[0].name").value("취침학개론"))
 		.andExpect(jsonPath("$.data.exceptionalScheduleList").isNotEmpty())
-		.andExpect(jsonPath("$.data.exceptionalScheduleList[0].location").value("공원 쉼터"));
+		.andExpect(jsonPath("$.data.exceptionalScheduleList[0].location").value("공원 쉼터"))
+		.andDo(result->{
+			String response = result.getResponse().getContentAsString();
+			id = Long.parseLong(JsonPath.parse(response).read("$.data.lectureList[0].id").toString());
+			irrId = Long.parseLong(JsonPath.parse(response).read("$.data.exceptionalScheduleList[0].id").toString());
+			rId = Long.parseLong(JsonPath.parse(response).read("$.data.lectureList[0].scheduleList[0].id").toString());
+		});
 		
 		
 	}
 
 	@Override
 	public void updateTest() throws Exception {
-		RequestWeeklyTimeTable requestWeeklyTimeTable = new RequestWeeklyTimeTable(id,false);
+		RequestWeeklyTimeTable requestWeeklyTimeTable = new RequestWeeklyTimeTable(rId,false);
 		String json = toJson(requestWeeklyTimeTable);
 		
 		getMockMvc().perform(
 				put(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
-				.contentType("application/json")
+				.contentType(MediaType.APPLICATION_JSON)
 				.content(json)
 		)
 		.andExpect(status().isOk())
@@ -97,7 +107,26 @@ public class RequestWeeklyTimeTableTest extends AbstractCrudTest{
 	}
 
 	@Override
-	public void deleteTest() throws Exception {}
+	public void deleteTest() throws Exception {
+		getMockMvc().perform(delete("/ajax/lecture")
+				.with(csrf().asHeader())
+				.with(user(username).roles("READ","WRITE"))
+				.param("id", String.valueOf(id))
+		)
+		.andExpect(status().isOk())
+		.andExpect(authenticated().withUsername(username))
+		.andExpect(jsonPath("$.errorCode").value(0));
+		
+		getMockMvc().perform(delete("/ajax/calendar")
+				.with(csrf().asHeader())
+				.with(user(username).roles("READ","WRITE"))
+				.param("id", String.valueOf(irrId))
+		)
+		.andExpect(status().isOk())
+		.andExpect(authenticated().withUsername(username))
+		.andExpect(jsonPath("$.errorCode").value(0));
+		
+	}
 	
 	
 	

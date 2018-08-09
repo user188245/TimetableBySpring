@@ -9,7 +9,6 @@ import org.junit.Test;
 
 public class JDBCDriverTest {
 	
-	//String url = "jdbc:mysql://localhost:3306/timetable?autoReconnect=true&useSSL=false&characterEncoding=UTF-8";
 	String url = "jdbc:mysql://localhost:3306/timetable?serverTimezone=UTC";
 	String user = "admin";
 	String password = "admin";
@@ -17,7 +16,7 @@ public class JDBCDriverTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver");
+		Class.forName("com.mysql.jdbc.Driver");
 	}
 
 	@Test

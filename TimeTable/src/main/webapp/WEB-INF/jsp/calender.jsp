@@ -58,9 +58,6 @@
 					</div>
 					<br>
 					<input id="s_add" type="button" value="[임시추가]" class="w3-button w3-deep-purple">
-					<br>
-					JSON for ajax to server:
-					<br>
 					<span id="testing"></span>
 
 					<div id="s_popup" class="w3-container w3-cell-middle">

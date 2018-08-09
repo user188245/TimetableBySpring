@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import com.user188245.timetable.model.core.exception.BadAccessException;
 import com.user188245.timetable.model.dao.IrregularScheduleRepository;
 import com.user188245.timetable.model.dto.IrregularSchedule;
-import com.user188245.timetable.model.dto.Lecture;
 import com.user188245.timetable.model.dto.ScheduleTime;
-import com.user188245.timetable.model.dto.request.RequestLecture;
 import com.user188245.timetable.model.dto.request.RequestSchedule;
 import com.user188245.timetable.model.dto.response.DataResponse;
 

@@ -1,7 +1,6 @@
 package com.user188245.timetable.model.core.ajax.service;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;

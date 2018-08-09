@@ -1,19 +1,12 @@
 package com.user188245.timetable.model.core.security;
 
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 
 import com.user188245.timetable.model.core.security.service.CustomOAuth2UserService;
-import com.user188245.timetable.model.dto.Authority;
 import com.user188245.timetable.model.dto.User;
 
 @EnableWebSecurity
@@ -51,33 +44,11 @@ public class CustomSecurityConfigAdaptor extends WebSecurityConfigurerAdapter{
 			.userInfoEndpoint()
 				.oidcUserService(oAuth2UserService)
 				.customUserType(User.class, "google")
-				//.userAuthoritiesMapper(userAuthoritiesMapper())
 				.and()
 		.and()
 		//if 
 		.exceptionHandling()
 			.accessDeniedPage("/index");
-	}
-
-	private GrantedAuthoritiesMapper userAuthoritiesMapper() {
-		return new GrantedAuthoritiesMapper() {
-			@Override
-			public Collection<? extends GrantedAuthority> mapAuthorities(
-					Collection<? extends GrantedAuthority> authorities) {
-				Set<Authority> auths = EnumSet.noneOf(Authority.class);
-				authorities.forEach(x-> {
-					if(x.getAuthority().equals("ROLE_USER")) {
-						auths.add(Authority.ROLE_READ);
-						auths.add(Authority.ROLE_WRITE);
-					}else if(x.getAuthority().equals("ROLE_ADMIN")) {
-						auths.add(Authority.ROLE_READ);
-						auths.add(Authority.ROLE_WRITE);
-						auths.add(Authority.ROLE_SUPER);
-					}
-				});
-				return auths;
-			}
-		};
 	}
 	
 }

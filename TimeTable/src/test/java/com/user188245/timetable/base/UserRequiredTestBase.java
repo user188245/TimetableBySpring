@@ -4,10 +4,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.TestPropertySource;
 
 import com.user188245.timetable.model.dao.UserRepository;
 import com.user188245.timetable.model.dto.User;
 
+@TestPropertySource("classpath:test.properties")
 public abstract class UserRequiredTestBase {
 	
 	@Autowired

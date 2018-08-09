@@ -9,8 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.jayway.jsonpath.JsonPath;
 import com.user188245.timetable.base.AbstractCrudTest;
 import com.user188245.timetable.model.dto.IrregularSchedule;
 import com.user188245.timetable.model.dto.ScheduleTime;
@@ -38,7 +40,7 @@ public class RequestScheduleTest extends AbstractCrudTest{
 				post(targetURI)
 				.with(csrf().asHeader())
 				.with(user(username).roles("READ","WRITE"))
-				.contentType("application/json")
+				.contentType(MediaType.APPLICATION_JSON)
 				.content(json)
 		)
 		.andExpect(authenticated().withUsername(username))
@@ -63,7 +65,11 @@ public class RequestScheduleTest extends AbstractCrudTest{
 		.andExpect(jsonPath("$.data[0].id").isNumber())
 		.andExpect(jsonPath("$.data[0].location").value("장소"))
 		.andExpect(jsonPath("$.data[0].date").value(time0))
-		.andDo(print());
+		.andDo(print())
+		.andDo(result->{
+			String response = result.getResponse().getContentAsString();
+			id = Long.parseLong(JsonPath.parse(response).read("$.data[0].id").toString());
+		});
 	}
 
 	@Override

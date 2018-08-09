@@ -28,9 +28,6 @@
         </ul>
     <br>
     <input id="lecture_add" type="button" value="새 수업" class="w3-btn w3-deep-purple">
-    <br>
-    JSON for ajax to server:
-    <br>
     <span id="testing"></span>
 
     <div id="lecture_popup">
@@ -42,7 +39,6 @@
                     <label for="lec_add_name">이름</label><input type="text" id="lec_add_name" class="w3-input w3-border" required><br>
                     <label for="lec_add_instructor">강사</label><input type="text" id="lec_add_instructor" class="w3-input w3-border" required><br>
                     <label for="lec_add_homepage">홈페이지</label><input type="text" id="lec_add_homepage" class="w3-input w3-border" value="http://" required><br>
-                    <!--<label for="lec_add_credit">학점 : </label><input type="number" id="lec_add_credit" placeholder="0" min="0" max="10" class="w3-border" required><br>-->
                 </div>
                 <div class="w3-container w3-cell w3-pale-blue w3-panel w3-border w3-round-large">
                     <div class="w3-container">

@@ -5,6 +5,7 @@ import javax.servlet.Filter;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -13,6 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@TestPropertySource("classpath:test.properties")
 public abstract class AbstractCrudTest{
 	
 	private MockMvc mockMvc;

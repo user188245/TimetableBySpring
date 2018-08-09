@@ -8,7 +8,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.user188245.timetable.model.core.exception.BadAccessException;
-import com.user188245.timetable.model.dto.request.Request;
 import com.user188245.timetable.model.dto.response.DataResponse;
 
 @Service

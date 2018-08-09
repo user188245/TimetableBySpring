@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
+
 import com.user188245.timetable.model.dao.OAuthUserMappingRepository;
 import com.user188245.timetable.model.dao.UserRepository;
 import com.user188245.timetable.model.dto.OAuthUserMapping;
